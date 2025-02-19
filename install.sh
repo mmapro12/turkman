@@ -9,7 +9,7 @@ else
     exit 1
 fi
 
-sudo apt install manages-tr -y
+sudo apt install manpages-tr -y
 if command -v manpages-tr &>/dev/null; then
     echo "manpages-tr başarıyla yüklendi!"
 else
