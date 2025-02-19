@@ -2,7 +2,7 @@
 
 echo "Turkman kaldırılıyor..."
 
-if [ -f "/usr/local/bin/projem" ]; then
+if [ -f "/usr/local/bin/turkman" ]; then
     sudo rm /usr/local/bin/turkman
 else
     echo "Symbolic link bulunamadı."

@@ -10,10 +10,10 @@ else
 fi
 
 sudo apt install manages-tr -y
-if command -v manages-tr &>/dev/null; then
-    echo "manages-tr başarıyla yüklendi!"
+if command -v manpages-tr &>/dev/null; then
+    echo "manpages-tr başarıyla yüklendi!"
 else
-    echo "manages-tr yüklenirken bir hata oluştu."
+    echo "manpages-tr yüklenirken bir hata oluştu."
 fi
 
 chmod +x turkman.py
