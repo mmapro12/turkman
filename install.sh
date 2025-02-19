@@ -24,4 +24,5 @@ sudo gzip /usr/share/man/man1/turkman.1
 sudo mandb
 
 echo "Kurulum tamamlandı. 'turkman' komutu ile çalıştırabilirsiniz."
+echo "Yardım için 'turkman -h' komutunu kullanabilirsiniz."
 

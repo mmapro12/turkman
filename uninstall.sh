@@ -3,7 +3,7 @@
 echo "Turkman kaldırılıyor..."
 
 if [ -f "/usr/local/bin/projem" ]; then
-    sudo rm /usr/local/bin/projem
+    sudo rm /usr/local/bin/turkman
 else
     echo "Symbolic link bulunamadı."
 fi
@@ -19,7 +19,7 @@ if [ "$confirm" == "y" ]; then
     echo "Proje dosyaları silindi."
 fi
 
-sudo rm -f /usr/share/man/man1/myapp.1.gz
+sudo rm -f /usr/share/man/man1/turkman.1.gz
 sudo mandb
 
 echo "Kaldırma işlemi tamamlandı."
