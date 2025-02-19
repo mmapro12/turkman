@@ -1,3 +1,4 @@
-myenv/
-man_formatter.py
+/myenv/
 translate.py
+formatter.py
+buffer_github
