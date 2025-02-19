@@ -74,11 +74,14 @@ def turkman(command):
     # translated_man = translate_with_ai(original_man, AI_API_KEY, MODEL)
 
 
-
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 2:
         print("Kullanım: turkman <komut>")
+    elif sys.argv[1] in ["-h", "-?", "--help"]:
+        subprocess.run(["man", "./docs/man/man1/turkman.1"])
+    elif sys.argv[1] in ["-trl", "--trless", "--yardim", "--yardım"]:
+        subprocess.run(["less", "./docs/yardim/yardim.txt"])
     else:
         turkman(sys.argv[1])
 
