@@ -62,10 +62,9 @@ def turkman(command):
             file.write(github_translation)
         subprocess.run(["man", "./buffer_github"])
         return
-    print("Çeviri bulunamadı, yapay zeka ile çeviri yapılıyor...")
+    print("Çeviri bulunamadı.Yapay zeka ile çevirme hala çalışmıyor.Geliştirme aşamasında...")
 
-
-
+    # print("Çeviri bulunamadı, yapay zeka ile çeviri yapılıyor...")
     # 3. AI ile çeviri.Şimdilik çalışmıyor.Hala geliştirme aşamasında.
     # print("Çeviri bulunamadı, yapay zeka ile çeviri yapılıyor...")
     # original_man_path = subprocess.run(["man", "-w", command, "|", "col", "-bx"], capture_output=True, text=True).stdout

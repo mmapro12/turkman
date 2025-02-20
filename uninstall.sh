@@ -4,6 +4,8 @@ echo "Turkman kaldırılıyor..."
 
 if [ -f "/usr/local/bin/turkman" ]; then
     sudo rm /usr/local/bin/turkman
+    sudo rm /usr/local/bin/turkman-update
+    sudo rm /usr/local/bin/turkman-uninstall
 else
     echo "Symbolic link bulunamadı."
 fi

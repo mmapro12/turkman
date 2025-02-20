@@ -1,5 +1,4 @@
 #!/bin/bash
-
 echo "Turkman kurulumu başlıyor..."
 
 if command -v pip3 &>/dev/null; then
@@ -18,11 +17,14 @@ fi
 
 chmod +x turkman.py
 sudo ln -sf "$(pwd)/turkman.py" /usr/local/bin/turkman
+sudo ln -sf "$(pwd)/uninstall.sh" /usr/local/bin/turkman-uninstall
+sudo ln -sf "$(pwd)/uninstall.sh" /usr/local/bin/turkman-update
 
 sudo cp ./docs/man/man1/turkman.1 /usr/share/man/man1/
 sudo gzip /usr/share/man/man1/turkman.1
 sudo mandb
 
-echo "Kurulum tamamlandı. 'turkman' komutu ile çalıştırabilirsiniz."
+
+echo "Kurulum tamamlandı. 'turkman <komut>' ile çalıştırabilirsiniz."
 echo "Yardım için 'turkman -h' komutunu kullanabilirsiniz."
 
