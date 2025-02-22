@@ -42,13 +42,15 @@ Turkman'ı kaldırmak için:
 ```bash
 turkman uninstall
 ```
+## Son eklenen özellikler:
+- - Otomatik güncelleme sistemi
+  - - Genel düzenleme(mna sayfası, komutlar, genel dosyalar vb.)
+
 ## Üzerinde çalıştıklarımız (TODO List)
 
 - Yapay zeka ile man dosyalarının çevirme (Test aşamasında)
 - Rich ile man dosyalarına daha iyi bir görünüm verme (Kodu yazılıyor)
 - less menüsünü Türkçeye çevirme (Çeviriliyor)
-- Otomatik güncelleme sistemi (Son adımlar)
 - Lokalden git reposuna çevrilmiş man dosyasını ekleme (Plan aşamasında)
 - Turkman'ı tüm distrolarla uyumlu yapmak (Plan aşamasında)
-- Genel düzenleme(mna sayfası, komutlar, genel dosyalar vb.)
 - "Nasıl çalışır?" sayfası
