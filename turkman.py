@@ -121,6 +121,10 @@ if __name__ == "__main__":
         sys.exit(1)
     command = sys.argv[1]
 
+    if command == "uninstall":
+        uninstall()
+        sys.exit(0)
+
     if command == "update":
         check_update(True)
         sys.exit(0)
@@ -136,8 +140,6 @@ if __name__ == "__main__":
         version = get_version()
         print(f"Turkman {version}")
         sys.exit(0)
-    elif command == "uninstall":
-        uninstall()
     elif check_command(command):
         turkman(command)
     else:
