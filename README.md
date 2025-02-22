@@ -43,8 +43,8 @@ Turkman'ı kaldırmak için:
 turkman uninstall
 ```
 ## Son eklenen özellikler:
-- - Otomatik güncelleme sistemi
-  - - Genel düzenleme(mna sayfası, komutlar, genel dosyalar vb.)
+- Otomatik güncelleme sistemi
+- Genel düzenleme(man sayfası, komutlar, genel dosyalar vb.)
 
 ## Üzerinde çalıştıklarımız (TODO List)
 
