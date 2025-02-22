@@ -101,7 +101,7 @@ def check_command(command):
     return False
 
 
-def check_update():
+def check_update(p=False):
     v = get_version()
     url = f"https://raw.githubusercontent.com/mmapro12/turkman/main/version.txt"
     response = requests.get(url)
@@ -111,7 +111,7 @@ def check_update():
             if i.lower() == "y":
                 update()
         else:
-            print("Turkman en son sürümde.")
+            if p: print("Turkman en son sürümde.")
 
 
 if __name__ == "__main__":
@@ -119,8 +119,13 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Kullanım: turkman <komut>")
         sys.exit(1)
-
     command = sys.argv[1]
+
+    if command == "update":
+        check_update(True)
+        sys.exit(0)
+
+    check_update()
     if command in ["-h", "-?", "--help"]:
         subprocess.run(["man", "./docs/man/man1/turkman.1"])
     elif command in ["-trl", "--trless"]:
@@ -131,15 +136,12 @@ if __name__ == "__main__":
         version = get_version()
         print(f"Turkman {version}")
         sys.exit(0)
-    elif command == "update":
-        check_update()
     elif command == "uninstall":
         uninstall()
+    elif check_command(command):
+        turkman(command)
     else:
-        if check_command(command):
-            turkman(command)
-        else:
-            print(f"'{command}' adlı bir uygulama bulunmamakta.")
-            sys.exit(1)
+        print(f"'{command}' adlı bir uygulama bulunmamakta.")
+        sys.exit(1)
 
 
