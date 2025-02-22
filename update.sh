@@ -2,7 +2,7 @@
 
 INSTALL_DIR="/opt/turkman"
 BIN_PATH="/usr/local/bin/turkman"
-MAN_PATH="/usr/local/share/man/man1/turkman.1.gz"
+MAN_PATH="/usr/local/share/man/man1/turkman.1"
 
 echo "🔄 Güncelleme başlatılıyor..."
 
@@ -23,10 +23,9 @@ fi
 find . -name "*.pyc" -delete
 find . -name "__pycache__" -type d -exec rm -rf {} +
 
-if [[ -f "$INSTALL_DIR/docs/man/man1/turkman.1" ]]; then
-    gzip -c "$INSTALL_DIR/docs/man/man1/turkman.1" > "$MAN_PATH"
-    echo "📖 Man sayfası güncellendi!"
-fi
+ln -sf "$INSTALL_DIR/docs/man/man1/turkman.1"  "$MAN_PATH"
+echo "📖 Man sayfası güncellendi!"
+
 mandb
 
 echo "✅ Güncelleme tamamlandı!"

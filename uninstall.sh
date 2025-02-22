@@ -2,7 +2,7 @@
 
 INSTALL_DIR="/opt/turkman"
 BIN_PATH="/usr/local/bin/turkman"
-MAN_PATH="/usr/local/share/man/man1/turkman.1.gz"
+MAN_PATH="/usr/local/share/man/man1/turkman.1"
 
 echo "⚠️ Turkman kaldırılacak. Emin misiniz? (y/n)"
 read -r response

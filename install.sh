@@ -2,7 +2,7 @@
 
 INSTALL_DIR="/opt/turkman"
 BIN_PATH="/usr/local/bin/turkman"
-MAN_PATH="/usr/local/share/man/man1/turkman.1.gz"
+MAN_PATH="/usr/local/share/man/man1/turkman.1"
 
 echo "🔧 Turkman indiriliyor..."
 
@@ -36,7 +36,7 @@ chmod +x "$INSTALL_DIR/turkman.py"
 ln -sf "$INSTALL_DIR/turkman.py" "$BIN_PATH"
 
 
-gzip -c "$INSTALL_DIR/docs/man/man1/turkman.1" > "$MAN_PATH"
+ln -sf "$INSTALL_DIR/docs/man/man1/turkman.1" "$MAN_PATH"
 echo "📖 Man sayfası başarıyla eklendi!"
 
 mandb
