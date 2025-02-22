@@ -6,7 +6,8 @@ MAN_PATH="/usr/local/share/man/man1/turkman.1"
 
 echo "⚠️ Turkman kaldırılacak. Emin misiniz? (y/n)"
 read -r response
-if [[ "$response" != "y" ]]; then
+response=$(echo "$response" | tr '[:upper:]' '[:lower:]')  # Küçük harfe çevir
+if [[ "$response" != "y" && "$response" != "yes" ]]; then
     echo "❌ İşlem iptal edildi."
     exit 0
 fi
@@ -19,17 +20,30 @@ fi
 if [ -d "$INSTALL_DIR" ]; then
     echo "🗑️ Turkman kaldırılıyor..."
     rm -rf "$INSTALL_DIR"
+    echo "📂 '$INSTALL_DIR' kaldırıldı."
 else
-    echo "❌ Turkman bulunamadı!"
+    echo "⚠️ Uyarı: '$INSTALL_DIR' dizini zaten yok."
 fi
 
-if [ -f "$BIN_PATH" ]; then
+if [ -L "$BIN_PATH" ] || [ -f "$BIN_PATH" ]; then
     rm -f "$BIN_PATH"
+    echo "📌 '$BIN_PATH' kaldırıldı."
+else
+    echo "⚠️ Uyarı: '$BIN_PATH' zaten yok."
 fi
 
+# Man sayfasını kaldır
 if [ -f "$MAN_PATH" ]; then
     rm -f "$MAN_PATH"
+    echo "📖 Man sayfası kaldırıldı."
+else
+    echo "⚠️ Uyarı: Man sayfası zaten yok."
 fi
-mandb
-echo "✅ Turkman tamamen kaldırıldı!"
 
+if mandb &>/dev/null; then
+    echo "📖 Man sayfası veritabanı güncellendi!"
+else
+    echo "⚠️ 'mandb' çalıştırılırken hata oluştu!"
+fi
+
+echo "✅ Turkman tamamen kaldırıldı!"

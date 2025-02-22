@@ -14,21 +14,34 @@ fi
 if [ -d "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR" || exit
     echo "📥 Güncellemeler kontrol ediliyor..."
-    git pull origin main
+    
+    if [ -d ".git" ]; then
+        git pull origin main || { echo "❌ Güncelleme başarısız!"; exit 1; }
+    else
+        echo "❌ Turkman bir Git deposu değil! Elle güncelleyiniz."
+        exit 1
+    fi
 else
-    echo "❌Turkman bulunamadı! Önce 'sudo ./install.sh' ile yükleyin."
+    echo "❌ Turkman bulunamadı! Önce 'sudo ./install.sh' ile yükleyin."
     exit 1
 fi
 
 find . -name "*.pyc" -delete
-find . -name "__pycache__" -type d -exec rm -rf {} +
+find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
 
-ln -sf "$INSTALL_DIR/docs/man/man1/turkman.1"  "$MAN_PATH"
-echo "📖 Man sayfası güncellendi!"
+if [[ -f "$INSTALL_DIR/docs/man/man1/turkman.1" ]]; then
+    ln -sf "$INSTALL_DIR/docs/man/man1/turkman.1" "$MAN_PATH"
+    echo "📖 Man sayfası güncellendi!"
+else
+    echo "⚠️ Uyarı: Man sayfası bulunamadı. 'man turkman' çalışmayabilir."
+fi
 
-mandb
+if mandb &>/dev/null; then
+    echo "📖 Man sayfası dizini güncellendi!"
+else
+    echo "⚠️ 'mandb' çalıştırılırken hata oluştu!"
+fi
 
 echo "✅ Güncelleme tamamlandı!"
 echo "🔹 Kullanmak için: turkman <komut>"
 echo "🔹 Yardım için: turkman -h"
-
