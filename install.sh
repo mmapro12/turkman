@@ -36,12 +36,9 @@ chmod +x "$INSTALL_DIR/turkman.py"
 ln -sf "$INSTALL_DIR/turkman.py" "$BIN_PATH"
 
 
-if [[ -f "$INSTALL_DIR/docs/man/man1/turkman.1" ]]; then
-    gzip -c "$INSTALL_DIR/docs/man/man1/turkman.1" > "$MAN_PATH"
-    echo "📖 Man sayfası başarıyla eklendi!"
-else
-    echo "⚠️ Uyarı: Man sayfası bulunamadı!"
-fi
+gzip -c "$INSTALL_DIR/docs/man/man1/turkman.1" > "$MAN_PATH"
+echo "📖 Man sayfası başarıyla eklendi!"
+
 mandb
 
 echo "✅ Turkman başarıyla kuruldu!"
