@@ -22,7 +22,7 @@ if command -v python3 &>/dev/null; then
     echo "🐍 Python 3 bulundu. Gerekli paketler yükleniyor..."
     python3 -m pip install --upgrade pip
     if [[ -f requirements.txt ]]; then
-        python3 -m pip install -r requirements.txt || { echo "❌ Python bağımlılıkları yüklenemedi!"; exit 1; }
+        python3 -m pip install -r requirements.txt --break-system-packages || { echo "❌ Python bağımlılıkları yüklenemedi!"; exit 1; }
     else
         echo "⚠️ 'requirements.txt' bulunamadı. Bağımlılıklar yüklenemedi!"
     fi
