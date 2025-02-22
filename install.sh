@@ -1,30 +1,50 @@
 #!/bin/bash
-echo "Turkman kurulumu başlıyor..."
 
-if command -v pip3 &>/dev/null; then
-    pip3 install -r requirements.txt
+INSTALL_DIR="/opt/turkman"
+BIN_PATH="/usr/local/bin/turkman"
+MAN_PATH="/usr/local/share/man/man1/turkman.1.gz"
+
+echo "🔧 Turkman indiriliyor..."
+
+if [[ $EUID -ne 0 ]]; then
+   echo "❌ Lütfen root olarak çalıştırın: sudo ./install.sh"
+   exit 1
+fi
+
+if ! dpkg -s manpages-tr &>/dev/null; then
+    echo "📦 'manpages-tr' paketi eksik. Yükleniyor..."
+    sudo apt update && sudo apt install -y manpages-tr
 else
-    echo "pip3 yüklü değil, lütfen manuel yükleyin."
+    echo "✅ 'manpages-tr' zaten yüklü."
+fi
+
+if command -v python3 &>/dev/null; then
+    echo "🐍 Python 3 bulundu. Gerekli paketler yükleniyor..."
+    python3 -m pip install --upgrade pip
+    python3 -m pip install -r requirements.txt
+else
+    echo "❌ Python 3 yüklü değil! Lütfen önce Python 3 yükleyin."
     exit 1
 fi
 
-sudo apt install manpages-tr -y
-if command -v manpages-tr &>/dev/null; then
-    echo "manpages-tr başarıyla yüklendi!"
+echo "📂 Uygulama '$INSTALL_DIR' dizinine kopyalanıyor..."
+mkdir -p "$INSTALL_DIR"
+cp -r * "$INSTALL_DIR"
+
+
+chmod +x "$INSTALL_DIR/turkman.py"
+ln -sf "$INSTALL_DIR/turkman.py" "$BIN_PATH"
+
+
+if [[ -f "$INSTALL_DIR/docs/man/man1/turkman.1" ]]; then
+    gzip -c "$INSTALL_DIR/docs/man/man1/turkman.1" > "$MAN_PATH"
+    echo "📖 Man sayfası başarıyla eklendi!"
 else
-    echo "manpages-tr yüklenirken bir hata oluştu."
+    echo "⚠️ Uyarı: Man sayfası bulunamadı!"
 fi
+mandb
 
-chmod +x turkman.py
-sudo ln -sf "$(pwd)/turkman.py" /usr/local/bin/turkman
-sudo ln -sf "$(pwd)/uninstall.sh" /usr/local/bin/turkman-uninstall
-sudo ln -sf "$(pwd)/uninstall.sh" /usr/local/bin/turkman-update
-
-sudo cp ./docs/man/man1/turkman.1 /usr/share/man/man1/
-sudo gzip /usr/share/man/man1/turkman.1
-sudo mandb
-
-
-echo "Kurulum tamamlandı. 'turkman <komut>' ile çalıştırabilirsiniz."
-echo "Yardım için 'turkman -h' komutunu kullanabilirsiniz."
+echo "✅ Turkman başarıyla kuruldu!"
+echo "🔹 Kullanmak için: turkman <komut>"
+echo "🔹 Yardım için: turkman -h"
 

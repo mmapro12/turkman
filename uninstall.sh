@@ -1,28 +1,35 @@
 #!/bin/bash
 
-echo "Turkman kaldırılıyor..."
+INSTALL_DIR="/opt/turkman"
+BIN_PATH="/usr/local/bin/turkman"
+MAN_PATH="/usr/local/share/man/man1/turkman.1.gz"
 
-if [ -f "/usr/local/bin/turkman" ]; then
-    sudo rm /usr/local/bin/turkman
-    sudo rm /usr/local/bin/turkman-update
-    sudo rm /usr/local/bin/turkman-uninstall
+echo "⚠️ Turkman kaldırılacak. Emin misiniz? (y/n)"
+read -r response
+if [[ "$response" != "y" ]]; then
+    echo "❌ İşlem iptal edildi."
+    exit 0
+fi
+
+if [[ $EUID -ne 0 ]]; then
+   echo "❌ Lütfen root olarak çalıştırın: sudo ./uninstall.sh"
+   exit 1
+fi
+
+if [ -d "$INSTALL_DIR" ]; then
+    echo "🗑️ Turkman kaldırılıyor..."
+    rm -rf "$INSTALL_DIR"
 else
-    echo "Symbolic link bulunamadı."
+    echo "❌ Turkman bulunamadı!"
 fi
 
-if [ -f "requirements.txt" ]; then
-    pip3 uninstall -y -r requirements.txt
+if [ -f "$BIN_PATH" ]; then
+    rm -f "$BIN_PATH"
 fi
 
-read -p "Turkman dosyalarını da silmek istiyor musunuz? (y/n): " confirm
-if [ "$confirm" == "y" ]; then
-    cd ..
-    rm -rf "$(basename "$PWD")"
-    echo "Proje dosyaları silindi."
+if [ -f "$MAN_PATH" ]; then
+    rm -f "$MAN_PATH"
 fi
-
-sudo rm -f /usr/share/man/man1/turkman.1.gz
-sudo mandb
-
-echo "Kaldırma işlemi tamamlandı."
+mandb
+echo "✅ Turkman tamamen kaldırıldı!"
 
