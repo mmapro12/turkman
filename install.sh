@@ -1,6 +1,7 @@
 #!/bin/bash
 
 INSTALL_DIR="/opt/turkman"
+VENV_DIR="$INSTALL_DIR/venv"
 BIN_PATH="/usr/local/bin/turkman"
 MAN_PATH="/usr/local/share/man/man1/turkman.1"
 
@@ -18,30 +19,38 @@ else
     echo "✅ 'manpages-tr' zaten yüklü."
 fi
 
-if command -v python3 &>/dev/null; then
-    echo "🐍 Python 3 bulundu. Gerekli paketler yükleniyor..."
-    python3 -m pip install --upgrade pip
-    if [[ -f requirements.txt ]]; then
-        python3 -m pip install -r requirements.txt --break-system-packages || { echo "❌ Python bağımlılıkları yüklenemedi!"; exit 1; }
-    else
-        echo "⚠️ 'requirements.txt' bulunamadı. Bağımlılıklar yüklenemedi!"
-    fi
-else
+if ! command -v python3 &>/dev/null; then
     echo "❌ Python 3 yüklü değil! Lütfen önce Python 3 yükleyin."
     exit 1
 fi
 
-echo "📂 Uygulama '$INSTALL_DIR' dizinine kopyalanıyor..."
+echo "🐍 Python 3 bulundu. Sanal ortam oluşturuluyor..."
+
 mkdir -p "$INSTALL_DIR" || { echo "❌ Dizin oluşturulamadı!"; exit 1; }
+
 cp -r * "$INSTALL_DIR" || { echo "❌ Dosyalar kopyalanırken hata oluştu!"; exit 1; }
 
-if [[ -f "$INSTALL_DIR/turkman.py" ]]; then
-    chmod +x "$INSTALL_DIR/turkman.py"
-    ln -sf "$INSTALL_DIR/turkman.py" "$BIN_PATH"
-else
-    echo "❌ Hata: 'turkman.py' bulunamadı! Kurulum başarısız."
-    exit 1
+if [[ ! -d "$VENV_DIR" ]]; then
+    echo "🐍 Sanal ortam oluşturuluyor..."
+    python3 -m venv "$VENV_DIR"
 fi
+
+echo "📌 Python bağımlılıkları yükleniyor..."
+"$VENV_DIR/bin/pip" install --upgrade pip
+if [[ -f "$INSTALL_DIR/requirements.txt" ]]; then
+    "$VENV_DIR/bin/pip" install -r "$INSTALL_DIR/requirements.txt" || { echo "❌ Python bağımlılıkları yüklenemedi!"; exit 1; }
+else
+    echo "⚠️ 'requirements.txt' bulunamadı. Bağımlılıklar yüklenemedi!"
+fi
+
+echo "🚀 Çalıştırılabilir dosya oluşturuluyor..."
+cat << EOF > "$BIN_PATH"
+#!/bin/bash
+source "$VENV_DIR/bin/activate"
+python "$INSTALL_DIR/turkman.py" "\$@"
+EOF
+
+chmod +x "$BIN_PATH"
 
 if [[ -f "$INSTALL_DIR/docs/man/man1/turkman.1" ]]; then
     ln -sf "$INSTALL_DIR/docs/man/man1/turkman.1" "$MAN_PATH"

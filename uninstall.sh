@@ -6,7 +6,7 @@ MAN_PATH="/usr/local/share/man/man1/turkman.1"
 
 echo "⚠️ Turkman kaldırılacak. Emin misiniz? (y/n)"
 read -r response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')  # Küçük harfe çevir
+response=$(echo "$response" | tr '[:upper:]' '[:lower:]') 
 if [[ "$response" != "y" && "$response" != "yes" ]]; then
     echo "❌ İşlem iptal edildi."
     exit 0
@@ -32,7 +32,12 @@ else
     echo "⚠️ Uyarı: '$BIN_PATH' zaten yok."
 fi
 
-# Man sayfasını kaldır
+if [ -d "$INSTALL_DIR/venv" ]; then
+    echo "🐍 Virtualenv kaldırılıyor..."
+    rm -rf "$INSTALL_DIR/venv"
+    echo "📂 Virtualenv temizlendi."
+fi
+
 if [ -f "$MAN_PATH" ]; then
     rm -f "$MAN_PATH"
     echo "📖 Man sayfası kaldırıldı."
