@@ -80,13 +80,15 @@ if __name__ == "__main__":
         subprocess.run(["less", "./docs/man/man1/turkman.1"])
     elif command in ["-trl", "--trless"]:
         subprocess.run(["less", "./docs/yardim/yardim.txt"])
+    elif command in ["-l", "--less"]:
+        subprocess.run(["less", "--help"])
     elif command in ["-y", "--yardım", "--yardim"]:
         turkman("turkman")
     elif command in ["-v", "--version"]:
         print("Turkman")
         sys.exit(0)
     elif command == "turkman":
-        subprocess.run(["man", f"{INSTALL_PATH}/docs/man/man1/turkman.1"])
+        turkman("turkman")
     elif check_command(command):
         turkman(command)
     else:

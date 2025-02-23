@@ -1,15 +1,13 @@
 #!/bin/bash
 
 INSTALL_DIR="/opt/turkman"
-VENV_DIR="$INSTALL_DIR/venv"
-BIN_PATH="/usr/local/bin/turkman"
-MAN_PATH="/usr/share/man/man1/turkman.1"
+BACKUP_DIR="$INSTALL_DIR.bak"
 
 echo "Turkman güncelleme başlatılıyor..."
 
 if [[ $EUID -ne 0 ]]; then
-   echo "❌ Lütfen root olarak çalıştırın: sudo ./update.sh"
-   exit 1
+    echo "❌ Lütfen root olarak çalıştırın: sudo ./update.sh"
+    exit 1
 fi
 
 if [[ ! -d "$INSTALL_DIR" ]]; then
@@ -17,44 +15,28 @@ if [[ ! -d "$INSTALL_DIR" ]]; then
     exit 1
 fi
 
-cd "$INSTALL_DIR" || { echo "❌ Dizin değiştirilemedi!"; exit 1; }
+echo "Yedekleme yapılıyor..."
+mv "$INSTALL_DIR" "$BACKUP_DIR"
 
-if [[ -d ".git" ]]; then
-    echo "📥 Güncellemeler kontrol ediliyor..."
-    git pull origin main || { echo "❌ Güncelleme başarısız!"; exit 1; }
-else
-    echo "❌ Turkman bir Git deposu değil! Manuel güncelleyiniz."
+echo "En son sürüm indiriliyor..."
+git clone https://github.com/mmapro12/turkman.git "$INSTALL_DIR" || {
+    echo "❌ Git klonlama başarısız oldu! Yedek geri yükleniyor..."
+    mv "$BACKUP_DIR" "$INSTALL_DIR"
     exit 1
-fi
+}
 
-find . -name "*.pyc" -delete
-find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
+cd "$INSTALL_DIR"
 
-if [[ -d "$VENV_DIR" ]]; then
-    echo "🐍 Python bağımlılıkları güncelleniyor..."
-    "$VENV_DIR/bin/pip" install --upgrade pip
-    if [[ -f "$INSTALL_DIR/requirements.txt" ]]; then
-        "$VENV_DIR/bin/pip" install -r "$INSTALL_DIR/requirements.txt" || { echo "❌ Bağımlılıklar güncellenemedi!"; exit 1; }
-    else
-        echo "⚠️ 'requirements.txt' bulunamadı. Bağımlılıklar yüklenemedi!"
-    fi
-else
-    echo "⚠️ Sanal ortam bulunamadı! 'sudo ./install.sh' ile tekrar kurabilirsiniz."
-fi
 
-if [[ -f "$INSTALL_DIR/docs/man/man1/turkman.1" ]]; then
-    ln -sf "$INSTALL_DIR/docs/man/man1/turkman.1" "$MAN_PATH"
-    echo "📖 Man sayfası güncellendi!"
-else
-    echo "⚠️ Uyarı: Man sayfası bulunamadı. 'man turkman' çalışmayabilir."
-fi
 
-if mandb &>/dev/null; then
-    echo "📖 Man sayfası dizini güncellendi!"
-else
-    echo "⚠️ 'mandb' çalıştırılırken hata oluştu!"
-fi
+chmod +x scripts/install.sh
+sudo scripts/install.sh || {
+    echo "❌ Kurulum betiği başarısız oldu! Yedek geri yükleniyor..."
+    rm -rf "$INSTALL_DIR"
+    mv "$BACKUP_DIR" "$INSTALL_DIR"
+    exit 1
+}
 
-echo "✅ Güncelleme tamamlandı!"
-echo "🔹 Kullanmak için: turkman <komut>"
-echo "🔹 Yardım için: turkman -h"
+rm -rf "$BACKUP_DIR"
+
+echo "✅ Turkman başarıyla güncellendi!"
