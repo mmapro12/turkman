@@ -3,9 +3,9 @@
 INSTALL_DIR="/opt/turkman"
 VENV_DIR="$INSTALL_DIR/venv"
 BIN_PATH="/usr/local/bin/turkman"
-MAN_PATH="/usr/local/share/man/man1/turkman.1"
+MAN_PATH="/usr/share/man/man1/turkman.1"
 
-echo "\u0001F504 Turkman güncelleme başlatılıyor..."
+echo "Turkman güncelleme başlatılıyor..."
 
 if [[ $EUID -ne 0 ]]; then
    echo "❌ Lütfen root olarak çalıştırın: sudo ./update.sh"
@@ -23,7 +23,7 @@ if [[ -d ".git" ]]; then
     echo "📥 Güncellemeler kontrol ediliyor..."
     git pull origin main || { echo "❌ Güncelleme başarısız!"; exit 1; }
 else
-    echo "❌ Turkman bir Git deposu değil! Elle güncelleyiniz."
+    echo "❌ Turkman bir Git deposu değil! Manuel güncelleyiniz."
     exit 1
 fi
 
