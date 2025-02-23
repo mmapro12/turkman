@@ -10,6 +10,7 @@ TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkman-pretest"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/"
 
+
 def check_local_translation(command):
     """Yerel Türkçe man sayfasını kontrol eder."""
     command_path = subprocess.run(["man", "-w", "-L", "tr", command], capture_output=True, text=True)
@@ -66,7 +67,6 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Kullanım: turkman <komut>")
         sys.exit(1)
-    
     command = sys.argv[1]
     
     if command == "uninstall":
