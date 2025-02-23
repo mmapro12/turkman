@@ -47,23 +47,17 @@ def get_version():
     except FileNotFoundError:
         return "0.0.0"
 
-def update():
-    """Update scriptini çalıştırır"""
-    script_path = os.path.join(INSTALL_PATH, "update.sh")
-    if os.path.exists(script_path):
-        subprocess.run(["chmod", "+x", script_path])
-        subprocess.run(["sudo", script_path], check=True)
-    else:
-        print("❌ Güncelleme komutu bulunamadı!")
 
-def uninstall():
-    """Uninstall scriptini çalıştırır"""
-    script_path = os.path.join(INSTALL_PATH, "uninstall.sh")
-    if os.path.exists(script_path):
-        subprocess.run(["chmod", "+x", script_path])
+def run_script(script_name):
+    script_path = os.path.join(INSTALL_PATH, script_name)
+    if not os.path.exists(script_path):
+        print(f"❌ Hata: {script_name} bulunamadı!")
+        sys.exit(1)
+
+    try:
         subprocess.run(["sudo", script_path], check=True)
-    else:
-        print("❌ Kaldırma komutu bulunamadı!")
+    except subprocess.CalledProcessError:
+        print(f"❌ {script_name} çalıştırılırken hata oluştu!")
 
 def check_command(command):
     """Man sayfasının olup olmadığını kontrol eder."""
@@ -77,7 +71,7 @@ def check_update(p=False):
     if response.status_code == 200 and response.text.strip() != v:
         i = input(f"Turkman eski sürümde ({v} -> {response.text.strip()}). Güncellemek ister misiniz? (y/n) ")
         if i.lower() == "y":
-            update()
+            run_script("update.sh")
     elif p:
         print("Turkman en son sürümde.")
 
@@ -89,7 +83,7 @@ if __name__ == "__main__":
     command = sys.argv[1]
     
     if command == "uninstall":
-        uninstall()
+        run_script("uninstall.sh")
         sys.exit(0)
     elif command == "update":
         check_update(True)
