@@ -26,11 +26,14 @@ mv "$INSTALL_DIR" "$BACKUP_DIR"
 
 echo "En son sürüm indiriliyor..."
 
-sudo bash <(wget -qO- https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh) || {
+wget -O turkman_install.sh https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh) || {
     echo "❌ Indirme başarısız oldu! Yedek geri yükleniyor..."
     mv "$BACKUP_DIR" "$INSTALL_DIR"
     exit 1
 }
+
+chmod +x turkman_install.sh 
+sudo ./turkman_install.sh
 
 rm -rf "$BACKUP_DIR"
 echo "✅ Turkman başarıyla güncellendi!"

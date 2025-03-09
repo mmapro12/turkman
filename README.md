@@ -44,7 +44,9 @@ sudo apt install manpages-tr git wget
 Turkman'ı indirmek için:
 
 ```bash
-bash <(wget -qO- https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh)
+wget -O turkman_install.sh https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh)
+chmod +x turkman_install.sh 
+sudo ./turkman_install.sh
 ```
 
 ### Güncelleme
