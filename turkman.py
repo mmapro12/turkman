@@ -10,7 +10,6 @@ TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkman-pretest"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/"
 
-
 def check_local_translation(command):
     """Yerel Türkçe man sayfasını kontrol eder."""
     command_path = subprocess.run(["man", "-w", "-L", "tr", command], capture_output=True, text=True)
@@ -22,23 +21,23 @@ def check_local_translation(command):
 
 def check_github_translation(command):
     """GitHub deposunda çeviri olup olmadığını kontrol eder."""
-    url = f"{GITHUB_RAW_URL}{command}.1"
+    url = f"{GITHUB_RAW_URL}{command}"
     response = requests.get(url)
     if response.status_code == 200:
         return response.text
     return None
 
 
-def turkman(command):
+def main(command):
     """Ana akış."""
     if check_local_translation(command):
         return
     
     github_translation = check_github_translation(command)
     if github_translation:
-        with open("./buffer_github", "w") as file:
+        with open(f"{INSTALL_PATH}/buffs/{command}", "w") as file:
             file.write(github_translation)
-        subprocess.run(["man", "./buffer_github"])
+        subprocess.run(["man", f"{INSTALL_PATH}/buffs/{command}"])
         return
     
     print("Çeviri bulunamadı. Yapay zeka ile çeviri test aşamasında...")
@@ -48,13 +47,13 @@ def run_script(script_name):
     """Scriptleri çalıştırır."""
     script_path = os.path.join(INSTALL_PATH, "scripts", script_name)
     if not os.path.exists(script_path):
-        print(f"❌ Hata: {script_name} bulunamadı!")
+        print(f"Hata: {script_name} bulunamadı!")
         sys.exit(1)
 
     try:
         subprocess.run(["sudo", script_path], check=True)
     except subprocess.CalledProcessError:
-        print(f"❌ {script_name} çalıştırılırken hata oluştu!")
+        print(f"{script_name} çalıştırılırken hata oluştu!")
 
 
 def check_command(command):
@@ -75,23 +74,20 @@ if __name__ == "__main__":
     elif command == "update":
         run_script("update.sh")
         sys.exit(0)
-    
-    if command in ["-h", "-?", "--help"]:
-        subprocess.run(["less", "./docs/man/man1/turkman.1"])
+    elif command in ["-h", "-?", "--help"]:
+        subprocess.run(["less", f"{INSTALL_PATH}/docs/man/man1/turkman"])
     elif command in ["-trl", "--trless"]:
-        subprocess.run(["less", "./docs/yardim/yardim.txt"])
+        subprocess.run(["less", f"{INSTALL_PATH}/docs/yardim/yardim.txt"])
     elif command in ["-l", "--less"]:
         subprocess.run(["less", "--help"])
-    elif command in ["-y", "--yardım", "--yardim"]:
-        turkman("turkman")
+    elif command in ["-y", "--yardım", "--yardim", "turkman"]:
+        subprocess.run(["less", f"{INSTALL_PATH}/docs/tr/turkman"])
     elif command in ["-v", "--version"]:
         print("Turkman")
         sys.exit(0)
-    elif command == "turkman":
-        turkman("turkman")
     elif check_command(command):
-        turkman(command)
+        main(command)
     else:
-        print(f"'{command}' adlı bir uygulama bulunamadı.")
+        print(f"'{command}' adında bir komut bulunamadı.")
         sys.exit(1)
 

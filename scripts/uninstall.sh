@@ -1,10 +1,12 @@
 #!/bin/bash
 
 INSTALL_DIR="/opt/turkman"
+VENV_DIR="$INSTALL_DIR/venv"
 BIN_PATH="/usr/local/bin/turkman"
 MAN_PATH="/usr/share/man/man1/turkman.1"
+GIT_REPO="https://github.com/mmapro12/turkman.git"
 
-echo "️Turkman kaldırılıyor..."
+echo "Turkman kaldırılıyor..."
 
 if [[ $EUID -ne 0 ]]; then
     echo "❌ Lütfen root olarak çalıştırın: sudo ./uninstall.sh"

@@ -1,4 +1,5 @@
-/myenv/
+/buffs/
+/venv/
 translate.py
 formatter.py
-buffer_github
+write.sh
