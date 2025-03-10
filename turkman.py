@@ -35,9 +35,10 @@ def main(command):
     
     github_translation = check_github_translation(command)
     if github_translation:
-        with open(f"{INSTALL_PATH}/buffs/{command}", "w") as file:
+        subprocess.run(["touch", f"./buffs/{command}"])
+        with open(f"./buffs/{command}", "w") as file:
             file.write(github_translation)
-        subprocess.run(["man", f"{INSTALL_PATH}/buffs/{command}"])
+        subprocess.run(["man", f"./buffs/{command}"])
         return
     
     print("Çeviri bulunamadı. Yapay zeka ile çeviri test aşamasında...")
