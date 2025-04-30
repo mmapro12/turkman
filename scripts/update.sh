@@ -16,7 +16,7 @@ fi
 
 if [[ ! -d "$INSTALL_DIR" ]]; then
     echo "❌ Turkman bulunamadı! Önce 'https://github.com/mmapro12/turkman' web sitesinden yükleyin."
-    echo "Veya şu komutu deneyin:\nwget -qO - https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh | sudo bash" 
+    echo "Veya şu komutu deneyin:\n\tcurl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/install.sh | sudo bash" 
     exit 1
 fi
 
@@ -25,14 +25,11 @@ mv "$INSTALL_DIR" "$BACKUP_DIR"
 
 echo "En son sürüm indiriliyor..."
 
-wget -qO - https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh | sudo bash || {
+curl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/install.sh | sudo bash || {
     echo "❌ Indirme başarısız oldu! Yedek geri yükleniyor..."
     mv "$BACKUP_DIR" "$INSTALL_DIR"
     exit 1
 }
-
-chmod +x turkman_install.sh 
-sudo ./turkman_install.sh
 
 rm -rf "$BACKUP_DIR"
 echo "✅ Turkman başarıyla güncellendi!"

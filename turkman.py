@@ -16,7 +16,7 @@ GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/"
 
 def get_version():
     "Turkman version"
-    with open(f"./version.txt") as file:
+    with open(f"{INSTALL_PATH}/version.txt") as file:
         return file.readline()
 
 
@@ -83,12 +83,6 @@ def manpage(command: str):
         subprocess.run(["man", buffer_path])
         return
     typer.echo(f"'{command}' için çeviri bulunamadı.", err=True)
-
-
-@app.command()
-def trhelp():
-    """Türkçe yardım metnini gösterir."""
-    subprocess.run(["less", "./docs/tr/man/man1/turkman"])
 
 
 @app.command()
