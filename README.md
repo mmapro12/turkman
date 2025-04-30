@@ -1,25 +1,20 @@
 
 # Turkman: Linux için Türkçe Man sayfaları çevirisi ve zenginleştirme uygulaması
 
-Windows 10'un desteğinin sona ermesiyle, Windows 11'e geçiş yapamayan birçok kullanıcının Linuxa geçişi zor olacakken, Turkman bu geçişi kolaylaştırmak amacıyla tasarlanmıştır. Uygulama, Linux komutlarının man sayfalarını Türkçeye çevirir ve zenginleştirir. Turkman, Türkçe içerik eksikliğini gidererek, Linux kullanıcıları için daha erişilebilir bir deneyim sunmayı hedefler.
+Turkman, Linux komutlarının man sayfalarını Türkçeye çevirir ve db'ye kaydeder. Türkçe içerik eksikliğini gidererek, Linux kullanıcıları için daha erişilebilir bir deneyim sunmayı hedefliyoruz.
 
 
 
 ## Güncellemeler 
-Güncellemeler her 2 haftada gelir.Hata düzltmeleri ve planlanıp da gecikmiş özelliklerin eklenmesi ise anında yapılır.
 
-### Son Eklenenler (v0.2.0) -> 09.03.2025 
+### Son Eklenenler (v0.3.x) -> 30.03.2025 
 
 - Hata düzeltmeleri.
-- İndirme, kaldırma sisteminde köklü değişiklikler yapıldı.
-- Güncelleme sistemi eklendi.
-- Dokümantasyon tekrardan yazıldı.
-- Turkman veri tabanı güncellendi.
+- typer cli kullanarak komut sistemi tekradan yazıldı.
 
 ### Üzerinde çalıştıklarımız
 
 - Yapay zeka ile man dosyalarının çevirme sistemi.
-- Typer ile CLI desteği.
 - Detaylı dokümatasyon.
 - Otomatik guncelleme sistemi.
 
@@ -32,11 +27,11 @@ Not: Turkman şimdilik sadece Debian ve Debian tabanlı distrolarda çalışmakt
 ### Gereksinimler
 
 - [manpages-tr](https://github.com/TLBP/manpages-tr/)
-- `git`, `wget`
+- `git`, `wget`, `python3`
 
 Tüm gereksinimleri indirmek için:
 ```bash
-sudo apt install manpages-tr git wget
+sudo apt install manpages-tr git wget python3
 ```
 
 ### İndirme
@@ -44,9 +39,7 @@ sudo apt install manpages-tr git wget
 Turkman'ı indirmek için:
 
 ```bash
-wget -O turkman_install.sh https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh)
-chmod +x turkman_install.sh 
-sudo ./turkman_install.sh
+curl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/install.sh | sudo bash
 ```
 
 ### Güncelleme
@@ -76,18 +69,18 @@ turkman <komut>
 Yardım için:
 
 ```bash
-turkman -h
+turkman --help
 ```
 Türkçe yardım için:
 
 ```bash
-turkman -y
+turkman trhelp
 ```
 
 Örnek kullanım:
 
 ```bash
-turkman brave-browser # Bu komut `brave-browser` uygulamasının man dosyasını Türkçe görüntüler.
+turkman manpage brave-browser # Bu komut `brave-browser` uygulamasının man dosyasını Türkçe görüntüler.
 ```
 
 ### Görseller
@@ -96,4 +89,5 @@ Yakında...
 
 
 ## Lisans
-Bu proje GPL3 ile lisanlanmıştır.Daha fazla bilgi için [LICENSE](./LICENSE) dosyasına bakabilirsin.
+Bu proje GPL3 ile lisanlanmıştır.Daha fazla bilgi için [LICENSE](./LICENSE) dosyasına bakabilirsiniz.
+

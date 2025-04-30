@@ -6,12 +6,11 @@ BIN_PATH="/usr/local/bin/turkman"
 MAN_PATH="/usr/share/man/man1/turkman.1"
 GIT_REPO="https://github.com/mmapro12/turkman.git"
 
-# bash <(wget -qO- https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh)
 
 echo "🛠️ Turkman kuruluyor..."
 
 if [[ $EUID -ne 0 ]]; then
-    echo "❌ Lütfen root olarak çalıştırın: sudo ./build.sh"
+    echo "❌ Lütfen root olarak çalıştırın: sudo ./install.sh"
     exit 1
 fi
 
@@ -24,11 +23,10 @@ rm -rf "$INSTALL_DIR"
 mkdir -p "$INSTALL_DIR" || { echo "❌ $INSTALL_DIR dizini oluşturulamadı!"; exit 1; }
 git clone "$GIT_REPO" "$INSTALL_DIR" || { echo "❌ Git deposu klonlanamadı!"; exit 1; }
 
-if [[ ! -d "$VENV_DIR/bin" ]]; then
-    echo "🐍 Sanal ortam oluşturuluyor..."
-    rm -rf "$VENV_DIR"  
-    python3 -m venv "$VENV_DIR" || { echo "❌ Sanal ortam oluşturulamadı!"; exit 1; }
-fi
+echo "🐍 Sanal ortam oluşturuluyor..."
+rm -rf "$VENV_DIR"  
+python3 -m venv "$VENV_DIR" || { echo "❌ Sanal ortam oluşturulamadı!"; exit 1; }
+
 
 echo "📦 Python bağımlılıkları yükleniyor..."
 "$VENV_DIR/bin/pip" install --upgrade pip || { echo "❌ pip güncellenemedi!"; exit 1; }
@@ -62,4 +60,4 @@ fi
 
 echo "✅ Turkman başarıyla kuruldu!"
 echo "🚀 Kullanmak için: turkman <komut>"
-echo "ℹ️ Yardım için: turkman -h"
+echo "ℹ️ Yardım için: turkman --help"

@@ -2,24 +2,34 @@
 
 import os
 import requests
-import subprocess 
-import sys
+import subprocess
+import typer
+
+
+app = typer.Typer()
 
 INSTALL_PATH = "/opt/turkman"
 TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkman-pretest"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/"
 
-def check_local_translation(command):
+
+def get_version():
+    "Turkman version"
+    with open(f"./version.txt") as file:
+        return file.readline()
+
+
+def check_local_translation(command: str) -> bool:
     """Yerel Türkçe man sayfasını kontrol eder."""
     command_path = subprocess.run(["man", "-w", "-L", "tr", command], capture_output=True, text=True)
-    if TRPATH in command_path.stdout.strip(): 
+    if TRPATH in command_path.stdout.strip():
         result = subprocess.run(["man", "-L", "tr", command])
         return result.returncode == 0
     return False
 
 
-def check_github_translation(command):
+def check_github_translation(command: str) -> str | None:
     """GitHub deposunda çeviri olup olmadığını kontrol eder."""
     url = f"{GITHUB_RAW_URL}{command}"
     response = requests.get(url)
@@ -28,67 +38,68 @@ def check_github_translation(command):
     return None
 
 
-def main(command):
-    """Ana akış."""
-    if check_local_translation(command):
-        return
-    
-    github_translation = check_github_translation(command)
-    if github_translation:
-        subprocess.run(["touch", f"./buffs/{command}"])
-        with open(f"./buffs/{command}", "w") as file:
-            file.write(github_translation)
-        subprocess.run(["man", f"./buffs/{command}"])
-        return
-    
-    print("Çeviri bulunamadı. Yapay zeka ile çeviri test aşamasında...")
-
-
-def run_script(script_name):
-    """Scriptleri çalıştırır."""
-    script_path = os.path.join(INSTALL_PATH, "scripts", script_name)
-    if not os.path.exists(script_path):
-        print(f"Hata: {script_name} bulunamadı!")
-        sys.exit(1)
-
-    try:
-        subprocess.run(["sudo", script_path], check=True)
-    except subprocess.CalledProcessError:
-        print(f"{script_name} çalıştırılırken hata oluştu!")
-
-
-def check_command(command):
+def check_command(command: str) -> bool:
     """Man sayfasının olup olmadığını kontrol eder."""
     path = subprocess.run(["man", "-w", command], capture_output=True, text=True)
     return bool(path.stdout.strip()) and os.path.exists(path.stdout.strip())
 
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Kullanım: turkman <komut>")
-        sys.exit(1)
-    command = sys.argv[1]
-    
-    if command == "uninstall":
-        run_script("uninstall.sh")
-        sys.exit(0)
-    elif command == "update":
-        run_script("update.sh")
-        sys.exit(0)
-    elif command in ["-h", "-?", "--help"]:
-        subprocess.run(["less", f"{INSTALL_PATH}/docs/man/man1/turkman"])
-    elif command in ["-trl", "--trless"]:
-        subprocess.run(["less", f"{INSTALL_PATH}/docs/yardim/yardim.txt"])
-    elif command in ["-l", "--less"]:
-        subprocess.run(["less", "--help"])
-    elif command in ["-y", "--yardım", "--yardim", "turkman"]:
-        subprocess.run(["less", f"{INSTALL_PATH}/docs/tr/turkman"])
-    elif command in ["-v", "--version"]:
-        print("Turkman")
-        sys.exit(0)
-    elif check_command(command):
-        main(command)
+@app.command()
+def uninstall():
+    """Turkman'ı sistemden kaldırır."""
+    script_path = os.path.join(INSTALL_PATH, "scripts", "uninstall.sh")
+    if os.path.exists(script_path):
+        subprocess.run(["sudo", script_path], check=True)
     else:
-        print(f"'{command}' adında bir komut bulunamadı.")
-        sys.exit(1)
+        typer.echo("Hata: uninstall.sh bulunamadı!", err=True)
 
+
+@app.command()
+def update():
+    """Turkman'ı günceller."""
+    script_path = os.path.join(INSTALL_PATH, "scripts", "update.sh")
+    if os.path.exists(script_path):
+        subprocess.run(["sudo", script_path], check=True)
+    else:
+        typer.echo("Hata: update.sh bulunamadı!", err=True)
+
+
+@app.command()
+def version():
+    """Turkman sürümünü gösterir."""
+    typer.echo(f"Turkman CLI {get_version()}")
+
+
+@app.command()
+def manpage(command: str):
+    """Belirtilen komut için Türkçe man sayfasını gösterir."""
+    if check_local_translation(command):
+        return
+    github_translation = check_github_translation(command)
+    if github_translation:
+        buffer_path = f"/tmp/{command}.man"
+        with open(buffer_path, "w") as file:
+            file.write(github_translation)
+        subprocess.run(["man", buffer_path])
+        return
+    typer.echo(f"'{command}' için çeviri bulunamadı.", err=True)
+
+
+@app.command()
+def trhelp():
+    """Türkçe yardım metnini gösterir."""
+    subprocess.run(["less", "./docs/tr/man/man1/turkman"])
+
+
+@app.command()
+def main(command: str):
+    """Gelen komuta göre man sayfasını veya ilgili işlemi çalıştırır."""
+    if check_command(command):
+        manpage(command)
+    else:
+        typer.echo(f"'{command}' adında bir komut bulunamadı.", err=True)
+        raise typer.Exit(code=1)
+
+
+if __name__ == "__main__":
+    app()

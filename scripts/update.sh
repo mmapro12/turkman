@@ -7,7 +7,6 @@ BIN_PATH="/usr/local/bin/turkman"
 MAN_PATH="/usr/share/man/man1/turkman.1"
 GIT_REPO="https://github.com/mmapro12/turkman.git"
 
-# bash <(wget -qO- https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh)
 
 echo "Turkman güncelleme başlatılıyor..."
 if [[ $EUID -ne 0 ]]; then
@@ -17,7 +16,7 @@ fi
 
 if [[ ! -d "$INSTALL_DIR" ]]; then
     echo "❌ Turkman bulunamadı! Önce 'https://github.com/mmapro12/turkman' web sitesinden yükleyin."
-    echo "Veya şu komutu deneyin:\nbash <(wget -qO- https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh)"
+    echo "Veya şu komutu deneyin:\nwget -qO - https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh | sudo bash" 
     exit 1
 fi
 
@@ -26,7 +25,7 @@ mv "$INSTALL_DIR" "$BACKUP_DIR"
 
 echo "En son sürüm indiriliyor..."
 
-wget -O turkman_install.sh https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh) || {
+wget -qO - https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh | sudo bash || {
     echo "❌ Indirme başarısız oldu! Yedek geri yükleniyor..."
     mv "$BACKUP_DIR" "$INSTALL_DIR"
     exit 1
