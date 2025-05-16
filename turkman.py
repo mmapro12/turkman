@@ -11,13 +11,21 @@ app = typer.Typer()
 INSTALL_PATH = "/opt/turkman"
 TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkman-pretest"
-GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/"
+GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/"
 
 
 def get_version():
-    "Turkman version"
+    """Turkman versiyonunu getirir."""
     with open(f"{INSTALL_PATH}/version.txt") as file:
         return file.readline()
+
+
+def get_last_version():
+    """Turkman'ın e güncel sürümünü getirir."""
+    response = requests.get("https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/version.txt")
+    if response.status_code == 200:
+        return response.text 
+    return False
 
 
 def check_local_translation(command: str) -> bool:
@@ -68,6 +76,7 @@ def update():
 def version():
     """Turkman sürümünü gösterir."""
     typer.echo(f"Turkman CLI {get_version()}")
+    typer.echo(f"Lastest version {get_last_version()}")
 
 
 @app.command()
@@ -97,3 +106,5 @@ def main(command: str):
 
 if __name__ == "__main__":
     app()
+
+

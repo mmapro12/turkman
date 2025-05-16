@@ -9,6 +9,7 @@ Turkman, Linux komutlarının man sayfalarını Türkçeye çevirir ve db'ye kay
 
 ### Son Eklenenler (v0.3.x) -> 30.04.2025 
 
+- Otomatik güncelleme sisteminin temelleri atıldı.
 - Hata düzeltmeleri.
 - typer cli kullanarak komut sistemi tekradan yazıldı.
 
@@ -17,6 +18,7 @@ Turkman, Linux komutlarının man sayfalarını Türkçeye çevirir ve db'ye kay
 - Yapay zeka ile man dosyalarının çevirme sistemi.
 - Detaylı dokümatasyon.
 - Otomatik guncelleme sistemi.
+- Python dokümantasyonunu turkman'a ekleme.
 
 
 
@@ -27,11 +29,13 @@ Not: Turkman şimdilik sadece Debian ve Debian tabanlı distrolarda çalışmakt
 ### Gereksinimler
 
 - [manpages-tr](https://github.com/TLBP/manpages-tr/)
-- `git`, `curl`, `python3`
+- `git`
+- `curl`
+- `python3`
 
 Tüm gereksinimleri indirmek için:
 ```bash
-sudo apt install manpages-tr git curl python3
+sudo apt install manpages-tr git curl python3 python3-pip
 ```
 
 ### İndirme

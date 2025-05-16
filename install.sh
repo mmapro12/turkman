@@ -6,6 +6,7 @@ BIN_PATH="/usr/local/bin/turkman"
 MAN_PATH="/usr/share/man/man1/turkman.1"
 GIT_REPO="https://github.com/mmapro12/turkman.git"
 
+sudo apt update && sudo apt install python3 python3-pip curl git manpages-tr
 
 echo "🛠️ Turkman kuruluyor..."
 
