@@ -10,7 +10,8 @@ TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkmandb"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/pages/"
 
-DB_DIR = os.path.join(INSTALL_PATH, "db")
+HOME_DIR = os.path.expanduser("~")
+DB_DIR = os.path.join(HOME_DIR, ".turkman-db")
 DB_PATH = os.path.join(DB_DIR, "turkman.db")
 
 def init_db():
@@ -30,7 +31,7 @@ def init_db():
 
 
 def rm_db():
-    os.remove(f"{os.path.join(INSTALL_PATH, "db", "turkman.db")}")
+    os.remove(f"{DB_DIR}")
 
 
 def add_translation(command, translated):
