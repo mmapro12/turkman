@@ -11,7 +11,7 @@ GITHUB_REPO = "mmapro12/turkmandb"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/pages/"
 
 HOME_DIR = os.path.expanduser("~")
-DB_DIR = os.path.join(HOME_DIR, ".turkman-db")
+DB_DIR = os.path.join(HOME_DIR, ".turkmandb")
 DB_PATH = os.path.join(DB_DIR, "turkman.db")
 
 def init_db():
@@ -28,10 +28,6 @@ def init_db():
     """)
     conn.commit()
     conn.close()
-
-
-def rm_db():
-    os.remove(f"{DB_DIR}")
 
 
 def add_translation(command, translated):

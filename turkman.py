@@ -100,11 +100,9 @@ def manpage(command: str):
 def db(command: str):
     """Turkmandb ile işlem yapmanızı sağlar."""
     if command == "update":
-        turkmandb.rm_db()
         turkmandb.init_db()
         turkmandb.get_turkmandb()
     elif command == "init":
-        turkmandb.rm_db()
         turkmandb.init_db()
     elif command == "test":
         print(turkmandb.get_translation("ani-cli"))
