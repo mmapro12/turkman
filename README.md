@@ -7,26 +7,23 @@ Turkman, Linux komutlarının man sayfalarını Türkçeye çevirir ve db'ye kay
 
 ## Güncellemeler 
 
-### Son Eklenenler (v0.3.x) -> 18.05.2025 
+### Son Eklenenler (v0.4.x) -> 20.05.2025 
 
-- Turkmandb entegresi için temeller atıldı.
-- Otomatik güncelleme sisteminin temelleri atıldı.
+- Turkmandb yeniden SQL sistemiyle yazıldı.
+- Güncelleme önerme eklendi.
 - Hata düzeltmeleri yapıldı.
-- typer cli kullanarak komut sistemi tekradan yazıldı.
 
 ### Üzerinde çalıştıklarımız
 
-- Turkmandb entegre
 - Yapay zeka ile man dosyalarının çevirme sistemi.
 - Detaylı dokümatasyon.
-- Otomatik guncelleme sistemi.
 - Python dokümantasyonunu turkman'a ekleme.
 
 
 
 ## Kurulum
 
-Not: Turkman şimdilik sadece Debian ve Debian tabanlı distrolarda çalışmaktadır.
+Not: Turkman şuan sadece Debian tabanlı dağıtımlarda (Pardus, Ubuntu, Linux Mint vb.) çalışmaktadır.
 
 ### Gereksinimler
 

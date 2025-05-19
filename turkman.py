@@ -4,8 +4,10 @@ import os
 import requests
 import subprocess
 import typer
+import turkmandb
 
 
+turkmandb.init_db()
 app = typer.Typer()
 
 INSTALL_PATH = "/opt/turkman"
@@ -95,6 +97,22 @@ def manpage(command: str):
 
 
 @app.command()
+def db(command: str):
+    """Turkmandb ile işlem yapmanızı sağlar."""
+    if command == "update":
+        turkmandb.rm_db()
+        turkmandb.init_db()
+        turkmandb.get_turkmandb()
+    elif command == "init":
+        turkmandb.rm_db()
+        turkmandb.init_db()
+    elif command == "test":
+        print(turkmandb.get_translation("ani-cli"))
+    else:
+        typer.echo("turkmandb: yanlış kullanım.")
+
+
+@app.command()
 def main(command: str):
     """Gelen komuta göre man sayfasını veya ilgili işlemi çalıştırır."""
     if check_command(command):
@@ -105,6 +123,12 @@ def main(command: str):
 
 
 if __name__ == "__main__":
+    v = get_version()
+    lv = get_last_version()
+    if v != lv:
+        typer.echo(f"{v} -> {lv}")
+        typer.echo("Turkman'ın yeni sürümü mevcut.Güncellemek için:\t$ turkman update")
+
     app()
 
 
