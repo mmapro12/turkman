@@ -1,5 +1,4 @@
 import sqlite3
-import subprocess
 import requests
 import os
 from datetime import datetime
@@ -38,7 +37,9 @@ def add_translation(command, translated):
         conn.commit()
         print(f"[✓] '{command}' komutu veritabanına eklendi.")
     except sqlite3.IntegrityError:
-        print(f"[!] '{command}' zaten eklenmiş.")
+        cursor.execute("UPDATE man_pages SET translated = ? WHERE command = ?", (translated, command))
+        conn.commit()
+        print(f"[~] '{command}' zaten vardı, açıklama güncellendi.")
     conn.close()
 
 
@@ -49,19 +50,6 @@ def get_translation(command):
     result = cursor.fetchone()
     conn.close()
     return result[0] if result else None
-
-
-def update_translation(command, new_translation):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        UPDATE man_pages
-        SET translated = ?, last_updated = ?
-        WHERE command = ?
-    """, (new_translation, datetime.now(), command))
-    conn.commit()
-    conn.close()
-    print(f"[✓] '{command}' çevirisi güncellendi.")
 
 
 def get_turkmandb():

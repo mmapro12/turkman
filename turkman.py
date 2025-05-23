@@ -19,14 +19,14 @@ GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/ma
 def get_version():
     """Turkman versiyonunu getirir."""
     with open(f"{INSTALL_PATH}/version.txt") as file:
-        return file.readline()
+        return file.readline().replace("\n", "")
 
 
 def get_last_version():
     """Turkman'ın e güncel sürümünü getirir."""
     response = requests.get("https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/version.txt")
     if response.status_code == 200:
-        return response.text 
+        return response.text.replace("\n", "")
     return False
 
 
@@ -46,6 +46,11 @@ def check_github_translation(command: str) -> str | None:
     if response.status_code == 200:
         return response.text
     return None
+
+
+def check_db_translation(command: str) -> str | None:
+    """Turkmandb'de çeviri olup olmadığını kontrol eder."""
+    return turkmandb.get_translation(command) 
 
 
 def check_command(command: str) -> bool:
@@ -86,13 +91,22 @@ def manpage(command: str):
     """Belirtilen komut için Türkçe man sayfasını gösterir."""
     if check_local_translation(command):
         return
-    github_translation = check_github_translation(command)
-    if github_translation:
+    # github_translation = check_github_translation(command)
+    # if github_translation:
+    #     buffer_path = f"/tmp/{command}.man"
+    #     with open(buffer_path, "w") as file:
+    #         file.write(github_translation)
+    #     subprocess.run(["man", buffer_path])
+    #     return
+
+    db_translation = check_db_translation(command)
+    if db_translation:
         buffer_path = f"/tmp/{command}.man"
         with open(buffer_path, "w") as file:
-            file.write(github_translation)
+            file.write(db_translation)
         subprocess.run(["man", buffer_path])
         return
+
     typer.echo(f"'{command}' için çeviri bulunamadı.", err=True)
 
 
@@ -125,7 +139,7 @@ if __name__ == "__main__":
     lv = get_last_version()
     if v != lv:
         typer.echo(f"{v} -> {lv}")
-        typer.echo("Turkman'ın yeni sürümü mevcut.Güncellemek için:\t$ turkman update")
+        typer.echo("Turkman'ın yeni sürümü mevcut. Güncellemek için:\n\t $ turkman update")
 
     app()
 
