@@ -31,5 +31,7 @@ curl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/insta
     exit 1
 }
 
+turkman db update
+
 rm -rf "$BACKUP_DIR"
 echo "✅ Turkman başarıyla güncellendi!"
