@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import os
 import requests
 import subprocess
@@ -137,7 +138,7 @@ def main(command: str):
 if __name__ == "__main__":
     v = get_version()
     lv = get_last_version()
-    if v != lv:
+    if v != lv and sys.argv[1] != "update":
         typer.echo(f"{v} -> {lv}")
         typer.echo("Turkman'ın yeni sürümü mevcut. Güncellemek için:\n\t $ turkman update")
 
