@@ -1,0 +1,170 @@
+.TH TURKMAN 1 "Haziran 2025" "Turkman v0.4.x" "Kullanıcı Komutları"
+.SH İSİM
+turkman \- Linux komutları için Türkçe man sayfası görüntüleyici
+.SH ÖZET
+.B turkman
+[\fIOPSİYON\fR] [\fIKOMUT\fR]
+.br
+.B turkman
+.B manpage
+\fIKOMUT\fR
+.br
+.B turkman
+.B db
+{\fBinit\fR|\fBsync\fR}
+.br
+.B turkman
+{\fBversion\fR|\fBupdate\fR|\fBuninstall\fR}
+.SH AÇIKLAMA
+.B turkman
+Linux komutlarının man sayfalarını Türkçe olarak görüntülemek için kullanılan bir araçtır.
+Türkçe man sayfalarını yerel sistem, SQLite veritabanı ve GitHub deposu gibi çoklu kaynaklardan
+alarak kullanıcılara sunar.
+
+Turkman, çevirileri şu öncelik sırasına göre arar:
+.IP 1. 4
+Yerel Türkçe man sayfaları (/usr/share/man/tr/)
+.IP 2. 4
+Yerel SQLite veritabanı (~/.turkmandb/turkman.db)
+.IP 3. 4
+GitHub çeviri deposu (mmapro12/turkmandb)
+
+Program, belirtilen komut için Türkçe çeviri bulursa onu görüntüler, bulamazsa hata mesajı verir.
+.SH KOMUTLAR
+.TP
+.B turkman \fIKOMUT\fR
+Belirtilen komut için Türkçe man sayfasını görüntüler. Bu temel kullanım biçimidir.
+.TP
+.B turkman manpage \fIKOMUT\fR
+Açık şekilde belirtilen komutun man sayfasını görüntüler. \fBturkman KOMUT\fR ile aynı işlevi görür.
+.TP
+.B turkman version
+Mevcut Turkman sürümü ve en güncel sürüm bilgisini gösterir.
+.TP
+.B turkman update
+Turkman'ı en güncel sürüme günceller. Sudo yetkisi gerektirir.
+.TP
+.B turkman uninstall
+Turkman'ı sistemden tamamen kaldırır. Sudo yetkisi gerektirir.
+.TP
+.B turkman db init
+Yerel SQLite veritabanını başlatır ve gerekli tablo yapılarını oluşturur.
+.TP
+.B turkman db sync
+GitHub deposundan en güncel çevirileri yerel veritabanına senkronize eder.
+İnternet bağlantısı gerektirir.
+.SH OPSİYONLAR
+.TP
+.B \-h, \-\-help
+Yardım mesajını gösterir ve çıkar.
+.TP
+.B \-\-version
+Sürüm bilgisini gösterir.
+.SH ÖRNEKLER
+.TP
+.B turkman ls
+\fBls\fR komutunun Türkçe man sayfasını görüntüler.
+.TP
+.B turkman grep
+\fBgrep\fR komutunun Türkçe man sayfasını görüntüler.
+.TP
+.B turkman manpage systemctl
+\fBsystemctl\fR komutunun Türkçe man sayfasını görüntüler.
+.TP
+.B turkman db sync
+GitHub deposundan güncel çevirileri indirir ve yerel veritabanına kaydeder.
+.TP
+.B turkman version
+Mevcut sürüm bilgisini ve güncel sürümü gösterir:
+.RS
+.nf
+Turkman CLI v0.4.2
+Latest version v0.4.3
+.fi
+.RE
+.SH DOSYALAR
+.TP
+.B /opt/turkman/
+Turkman kurulum dizini. Ana program dosyaları bu dizinde bulunur.
+.TP
+.B /opt/turkman/turkman.py
+Ana program dosyası.
+.TP
+.B /opt/turkman/version.txt
+Mevcut sürüm bilgisi dosyası.
+.TP
+.B ~/.turkmandb/
+Kullanıcı özel Turkman dizini. Yerel veritabanı bu dizinde saklanır.
+.TP
+.B ~/.turkmandb/turkman.db
+SQLite veritabanı dosyası. Çevirilerin yerel önbelleği.
+.TP
+.B /usr/share/man/tr/
+Sistem Türkçe man sayfaları dizini. Öncelikli çeviri kaynağı.
+.TP
+.B /tmp/\fIKOMUT\fR.man
+Geçici man dosyaları. Veritabanından alınan çeviriler geçici olarak burada saklanır.
+.SH ÇEVRE DEĞİŞKENLERİ
+Turkman, standart man komutu çevre değişkenlerini kullanır:
+.TP
+.B MANPATH
+Man sayfalarının aranacağı dizinleri belirtir.
+.TP
+.B LANG, LC_ALL
+Dil ayarlarını belirtir. Türkçe man sayfaları için önemlidir.
+.SH ÇIKIŞ DURUMU
+.TP
+.B 0
+Başarılı tamamlama.
+.TP
+.B 1
+Komut bulunamadı veya çeviri mevcut değil.
+.TP
+.B 2
+Geçersiz argüman veya parametre.
+.SH BAĞIMLILIKLAR
+.TP
+.B manpages-tr
+Türkçe man sayfaları paketi.
+.TP
+.B python3
+Python 3 yorumlayıcısı (gerekli).
+.TP
+.B python3-requests
+HTTP istekleri için Python modülü.
+.TP
+.B python3-typer
+CLI arayüzü için Python modülü.
+.TP
+.B git
+Sürüm kontrolü (kurulum ve güncelleme için).
+.TP
+.B curl
+HTTP dosya indirme aracı (kurulum için).
+.SH HATALAR
+Bilinen hatalar ve sınırlamalar:
+.IP \(bu 2
+Şu anda sadece Debian tabanlı Linux dağıtımlarında çalışır.
+.IP \(bu 2
+Bazı kompleks man sayfaları formatında sorunlar yaşanabilir.
+.IP \(bu 2
+İnternet bağlantısı olmadığında sadece yerel kaynaklar kullanılabilir.
+.IP \(bu 2
+Çok büyük man sayfaları için bellek kullanımı artabilir.
+
+Hata raporları için: https://github.com/mmapro12/turkman/issues
+.SH YAZAR
+Turkman, mmapro12 tarafından geliştirilmiştir.
+.SH TELIF HAKKI
+Telif Hakkı © 2025 mmapro12. GPL-3.0 lisansı altında lisanslanmıştır.
+Bu özgür yazılımdır: değiştirebilir ve yeniden dağıtabilirsiniz.
+.SH AYRICA BAKINIZ
+.BR man (1),
+.BR manpages-tr (7),
+.BR sqlite3 (1),
+.BR git (1),
+.BR curl (1)
+
+Turkman dokümantasyonu: https://github.com/mmapro12/turkman
+.br
+Çeviri deposu: https://github.com/mmapro12/turkmandb

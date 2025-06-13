@@ -1,4 +1,4 @@
-#!/bin/bash
+ !/bin/bash
 
 INSTALL_DIR="/opt/turkman"
 BACKUP_DIR="$INSTALL_DIR.bak"
@@ -31,7 +31,7 @@ curl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/insta
     exit 1
 }
 
-turkman db update
+turkman db sync
 
 rm -rf "$BACKUP_DIR"
 echo "✅ Turkman başarıyla güncellendi!"

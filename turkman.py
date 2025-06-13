@@ -6,29 +6,17 @@ import requests
 import subprocess
 import typer
 import turkmandb
+from common import *
 
 
 turkmandb.init_db()
 app = typer.Typer()
+db_app = typer.Typer()
 
 INSTALL_PATH = "/opt/turkman"
 TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkmandb"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/pages/"
-
-
-def get_version():
-    """Turkman versiyonunu getirir."""
-    with open(f"{INSTALL_PATH}/version.txt") as file:
-        return file.readline().replace("\n", "")
-
-
-def get_last_version():
-    """Turkman'ın e güncel sürümünü getirir."""
-    response = requests.get("https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/version.txt")
-    if response.status_code == 200:
-        return response.text.replace("\n", "")
-    return False
 
 
 def check_local_translation(command: str) -> bool:
@@ -111,21 +99,20 @@ def manpage(command: str):
     typer.echo(f"'{command}' için çeviri bulunamadı.", err=True)
 
 
-@app.command()
-def db(command: str):
-    """Turkmandb ile işlem yapmanızı sağlar."""
-    if command == "update":
-        turkmandb.init_db()
-        turkmandb.get_turkmandb()
-    elif command == "init":
-        turkmandb.init_db()
-    elif command == "test":
-        print(turkmandb.get_translation("ani-cli"))
-    else:
-        typer.echo("turkmandb: yanlış kullanım.")
+@db_app.command()
+def sync():
+    """Turkmandb'nin en yeni sürümünü getirir."""
+    turkmandb.init_db()
+    turkmandb.get_turkmandb()
 
 
-@app.command()
+@db_app.command()
+def init():
+    """Turkmandb'yi .turkmandb dizini altında oluşturur."""
+    turkmandb.init_db()
+
+
+@app.callback()
 def main(command: str):
     """Gelen komuta göre man sayfasını veya ilgili işlemi çalıştırır."""
     if check_command(command):
@@ -135,13 +122,9 @@ def main(command: str):
         raise typer.Exit(code=1)
 
 
+app.add_typer(db_app, name="db")
 if __name__ == "__main__":
-    v = get_version()
-    lv = get_last_version()
-    if v != lv and sys.argv[1] != "update":
-        typer.echo(f"{v} -> {lv}")
-        typer.echo("Turkman'ın yeni sürümü mevcut. Güncellemek için:\n\t $ turkman update")
-
+    check_updates(sys.argv[1])
     app()
 
 

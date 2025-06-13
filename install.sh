@@ -61,4 +61,6 @@ fi
 
 echo "✅ Turkman başarıyla kuruldu!"
 echo "🚀 Kullanmak için: turkman <komut>"
-echo "ℹ️ Yardım için: turkman --help"
+echo "📖 Türkçe man sayfaları yükleniyor"
+turkman db sync
+echo "ℹ️  Yardım için: turkman --help"
