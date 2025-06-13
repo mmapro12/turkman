@@ -112,7 +112,7 @@ def init():
     turkmandb.init_db()
 
 
-@app.callback()
+@app.command()
 def main(command: str):
     """Gelen komuta göre man sayfasını veya ilgili işlemi çalıştırır."""
     if check_command(command):
