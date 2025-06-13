@@ -13,6 +13,7 @@ turkmandb.init_db()
 app = typer.Typer()
 db_app = typer.Typer()
 
+TURKMAN_COMMANDS = ["db", "update", "uninstall", "version"]
 INSTALL_PATH = "/opt/turkman"
 TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkmandb"
@@ -122,9 +123,23 @@ def main(command: str):
         raise typer.Exit(code=1)
 
 
+def handle_man_command(command: str):
+    """Man sayfası komutunu işler."""
+    if check_command(command):
+        manpage(command)
+    else:
+        typer.echo(f"'{command}' adında bir komut bulunamadı.", err=True)
+        raise typer.Exit(code=1)
+
+
 app.add_typer(db_app, name="db")
 if __name__ == "__main__":
     check_updates(sys.argv[1])
-    app()
-
-
+    if len(sys.argv) > 1:
+        first_arg = sys.argv[1]
+        if first_arg in TURKMAN_COMMANDS:
+            app()
+        else:
+            handle_man_command(first_arg)
+    else:
+        app()
