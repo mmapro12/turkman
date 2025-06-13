@@ -13,7 +13,7 @@ turkmandb.init_db()
 app = typer.Typer()
 db_app = typer.Typer()
 
-TURKMAN_COMMANDS = ["db", "update", "uninstall", "version"]
+TURKMAN_COMMANDS = ["db", "update", "uninstall", "version", "--help"]
 INSTALL_PATH = "/opt/turkman"
 TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkmandb"
