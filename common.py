@@ -13,10 +13,13 @@ def get_version():
 
 
 def get_last_version():
-    """Turkman'ın e güncel sürümünü getirir."""
-    response = requests.get("https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/version.txt")
-    if response.status_code == 200:
-        return response.text.replace("\n", "")
+    """Turkman'ın en güncel sürümünü getirir."""
+    try:
+        response = requests.get("https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/version.txt", timeout=10)
+        if response.status_code == 200:
+            return response.text.replace("\n", "")
+    except requests.RequestException as e:
+        print(f"Sürüm kontrol hatası: {e}")
     return False
 
 
