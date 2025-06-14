@@ -28,7 +28,7 @@
 ### 🎖️ Sürüm Bilgisi
 
 - **Güncel Sürüm**: v0.5.x
-- **Son Güncelleme**: 13.06.2025
+- **Son Güncelleme**: 14.06.2025
 - **Platform Desteği**: Debian tabanlı dağıtımlar (Ubuntu, Pardus, Linux Mint vb.)
 
 ---
@@ -64,8 +64,6 @@ sudo apt install manpages-tr git curl python3 python3-pip
 
 ```bash
 curl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/install.sh | sudo bash
-turkman db init
-turkman db sync
 ```
 
 **Kurulum sonrası kontrol:**

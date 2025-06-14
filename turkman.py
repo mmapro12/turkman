@@ -145,7 +145,7 @@ def update():
 def version():
     """Turkman sürümünü gösterir."""
     typer.echo(f"Turkman CLI {get_version()}")
-    typer.echo(f"Latest version {get_last_version()}")
+    typer.echo(f"En yeni sürüm: {get_last_version()}")
 
 
 @app.command()
