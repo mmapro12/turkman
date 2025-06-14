@@ -64,6 +64,8 @@ sudo apt install manpages-tr git curl python3 python3-pip
 
 ```bash
 curl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/install.sh | sudo bash
+turkman db init
+turkman db sync
 ```
 
 **Kurulum sonrası kontrol:**
