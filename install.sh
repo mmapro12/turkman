@@ -6,6 +6,15 @@ BIN_PATH="/usr/local/bin/turkman"
 MAN_PATH="/usr/share/man/man1/turkman.1"
 GIT_REPO="https://github.com/mmapro12/turkman.git"
 
+# Gerçek kullanıcıyı tespit et (sudo ile çalışıyorsa)
+if [[ -n "$SUDO_USER" ]]; then
+    REAL_USER="$SUDO_USER"
+    REAL_HOME=$(eval echo "~$SUDO_USER")
+else
+    REAL_USER="$USER"
+    REAL_HOME="$HOME"
+fi
+
 sudo apt update && sudo apt install python3 python3-pip curl git manpages-tr
 
 echo "🛠️ Turkman kuruluyor..."
@@ -27,7 +36,6 @@ git clone "$GIT_REPO" "$INSTALL_DIR" || { echo "❌ Git deposu klonlanamadı!"; 
 echo "🐍 Sanal ortam oluşturuluyor..."
 rm -rf "$VENV_DIR"  
 python3 -m venv "$VENV_DIR" || { echo "❌ Sanal ortam oluşturulamadı!"; exit 1; }
-
 
 echo "📦 Python bağımlılıkları yükleniyor..."
 "$VENV_DIR/bin/pip" install --upgrade pip || { echo "❌ pip güncellenemedi!"; exit 1; }
@@ -62,6 +70,11 @@ fi
 echo "✅ Turkman başarıyla kuruldu!"
 echo "🚀 Kullanmak için: turkman <komut>"
 echo "📖 Türkçe man sayfaları yükleniyor"
-turkman db init
-turkman db sync
+
+# Veritabanı işlemlerini gerçek kullanıcı olarak çalıştır
+echo "🗄️ Veritabanı başlatılıyor..."
+sudo -u "$REAL_USER" HOME="$REAL_HOME" "$BIN_PATH" db init
+echo "🔄 Veritabanı senkronize ediliyor..."
+sudo -u "$REAL_USER" HOME="$REAL_HOME" "$BIN_PATH" db sync
+
 echo "ℹ️  Yardım için: turkman --help"
