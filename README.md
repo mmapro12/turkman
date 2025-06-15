@@ -2,6 +2,8 @@
 
 <div align="center">
 
+![Turkman](./imgs/turkman.png) 
+
 [![Version](https://img.shields.io/badge/version-0.6.2-blue.svg)](https://github.com/mmapro12/turkman/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
@@ -28,7 +30,7 @@
 
 ## 🚀 Hızlı Kurulum
 
-### 📦 APT ile Kurulum (Önerilen)
+### 📦 APT ile Kurulum (stable) (Önerilen)
 
 ```bash
 # .deb paketini indirin
@@ -39,10 +41,15 @@ sudo dpkg -i turkman_0.6.2_all.deb # hata verebilir aldırış etmeyin sonraki a
 sudo apt install -f  # Bağımlılıkları çözün
 ```
 
-### 🔧 Script ile Kurulum
+### 🔧 Script ile Kurulum (dev)
 
 ```bash
-curl -L https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh | sudo bash
+git clone https://github.com/mmapro12/turkman.git
+cd turkman 
+chmod +x install.sh
+./install.sh
+cd ..
+rm -rf turkman
 ```
 
 ### Indirdikten sonra:
