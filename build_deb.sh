@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Turkman .deb paketi oluşturma scripti
+# Bu script, Python projesini .deb paketine dönüştürür
 
 set -e
 
@@ -146,7 +148,12 @@ echo -e "${GREEN}🚀 Kurulum için:${NC}"
 echo -e "${BLUE}   sudo dpkg -i ${PACKAGE_FILE}${NC}"
 echo -e "${BLUE}   sudo apt-get install -f  # Bağımlılık sorunları varsa${NC}"
 
+# Temizlik seçeneği
+read -p "🧹 Geçici dosyaları temizle? (y/N): " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    rm -rf debian/
+    echo -e "${GREEN}✅ Temizlik tamamlandı!${NC}"
+fi
+
 echo -e "${GREEN}🎉 Turkman .deb paketi hazır!${NC}"
-sudo dpkg -i {PACKAGE_FILE}
-sudo apt install -r
-turkman db sync

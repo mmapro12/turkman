@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+import sys
+import os
+
+# Turkman'ı Python path'ine ekle
+sys.path.insert(0, '/usr/local/lib/python3/dist-packages')
+
+try:
+    from turkman.turkman import main
+    main()
+except ImportError as e:
+    print(f"❌ Turkman modülleri yüklenemedi: {e}")
+    print("🔧 Paket yeniden kurulumu gerekebilir: sudo apt reinstall turkman")
+    sys.exit(1)
+except Exception as e:
+    print(f"❌ Beklenmeyen hata: {e}")
+    sys.exit(1)

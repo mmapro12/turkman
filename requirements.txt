@@ -7,6 +7,7 @@ mdurl==0.1.2
 Pygments==2.19.1
 requests==2.32.3
 rich==13.9.4
+setuptools==80.9.0
 shellingham==1.5.4
 typer==0.15.2
 typing_extensions==4.12.2

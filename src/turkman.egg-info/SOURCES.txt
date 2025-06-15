@@ -1,0 +1,15 @@
+LICENSE
+README.md
+setup.py
+src/turkman/__init__.py
+src/turkman/db.py
+src/turkman/turkman.py
+src/turkman/utils.py
+src/turkman/version.py
+src/turkman.egg-info/PKG-INFO
+src/turkman.egg-info/SOURCES.txt
+src/turkman.egg-info/dependency_links.txt
+src/turkman.egg-info/entry_points.txt
+src/turkman.egg-info/not-zip-safe
+src/turkman.egg-info/requires.txt
+src/turkman.egg-info/top_level.txt

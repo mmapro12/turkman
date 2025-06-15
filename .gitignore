@@ -1,6 +1,7 @@
 /buffs/
-/venv/
-/__pycahe__/
+venv/
+__pycache__/
+.idea/
 translate.py
 formatter.py
 write.sh

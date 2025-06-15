@@ -1,171 +1,64 @@
-.TH TURKMAN 1 "June 2025" "Turkman v0.4.x" "User Commands"
+.TH TURKMAN 1 "2025-06-15" "turkman" "User Commands"
 .SH NAME
-turkman \- Turkish man page viewer for Linux commands
+turkman \- Turkish man pages for Linux commands
 .SH SYNOPSIS
 .B turkman
-[\fIOPTION\fR] [\fICOMMAND\fR]
+[\fICOMMAND\fR]
 .br
 .B turkman
-.B manpage
-\fICOMMAND\fR
-.br
-.B turkman
-.B db
-{\fBinit\fR|\fBsync\fR}
-.br
-.B turkman
-{\fBversion\fR|\fBupdate\fR|\fBuninstall\fR}
+[\fIOPTIONS\fR]
 .SH DESCRIPTION
 .B turkman
-is a tool for displaying Turkish translations of Linux command man pages.
-It provides Turkish man pages from multiple sources including local system,
-SQLite database, and GitHub repository.
-
-Turkman searches for translations in the following priority order:
+translates man pages of Linux commands into Turkish, allowing users to
+access system documentation in their native language.
+.PP
+The program follows this order to find translations:
 .IP 1. 4
 Local Turkish man pages (/usr/share/man/tr/)
 .IP 2. 4
-Local SQLite database (~/.turkmandb/turkman.db)
+Local SQLite database (~/.turkmandb/)
 .IP 3. 4
-GitHub translation repository (mmapro12/turkmandb)
-
-The program displays the Turkish translation if found for the specified command,
-otherwise it reports an error message.
-.SH COMMANDS
-.TP
-.B turkman \fICOMMAND\fR
-Display Turkish man page for the specified command. This is the basic usage form.
-.TP
-.B turkman manpage \fICOMMAND\fR
-Explicitly display man page for the specified command. Same functionality as \fBturkman COMMAND\fR.
-.TP
-.B turkman version
-Show current Turkman version and latest available version information.
-.TP
-.B turkman update
-Update Turkman to the latest version. Requires sudo privileges.
-.TP
-.B turkman uninstall
-Completely remove Turkman from the system. Requires sudo privileges.
-.TP
-.B turkman db init
-Initialize local SQLite database and create necessary table structures.
-.TP
-.B turkman db sync
-Synchronize latest translations from GitHub repository to local database.
-Requires internet connection.
+Online translations from the GitHub repository
 .SH OPTIONS
 .TP
-.B \-h, \-\-help
-Show help message and exit.
+.B \-\-help
+Displays the help message
 .TP
-.B \-\-version
-Show version information.
+.B version
+Shows version information
+.TP
+.B update
+Updates Turkman to the latest version
+.TP
+.B db init
+Initializes the local database
+.TP
+.B db sync
+Synchronizes translations from GitHub
+.TP
+.B uninstall
+Removes Turkman from the system
 .SH EXAMPLES
 .TP
 .B turkman ls
-Display Turkish man page for the \fBls\fR command.
-.TP
-.B turkman grep
-Display Turkish man page for the \fBgrep\fR command.
-.TP
-.B turkman manpage systemctl
-Display Turkish man page for the \fBsystemctl\fR command.
+Displays the Turkish man page for the 'ls' command
 .TP
 .B turkman db sync
-Download latest translations from GitHub repository and save to local database.
+Updates the translation database
 .TP
 .B turkman version
-Show current version information and latest version:
-.RS
-.nf
-Turkman CLI v0.4.2
-Latest version v0.4.3
-.fi
-.RE
+Shows version information
 .SH FILES
 .TP
-.B /opt/turkman/
-Turkman installation directory. Main program files are located here.
+.I ~/.turkmandb/turkman.db
+Local translation database
 .TP
-.B /opt/turkman/turkman.py
-Main program file.
-.TP
-.B /opt/turkman/version.txt
-Current version information file.
-.TP
-.B ~/.turkmandb/
-User-specific Turkman directory. Local database is stored here.
-.TP
-.B ~/.turkmandb/turkman.db
-SQLite database file. Local cache of translations.
-.TP
-.B /usr/share/man/tr/
-System Turkish man pages directory. Priority translation source.
-.TP
-.B /tmp/\fICOMMAND\fR.man
-Temporary man files. Translations retrieved from database are temporarily stored here.
-.SH ENVIRONMENT VARIABLES
-Turkman uses standard man command environment variables:
-.TP
-.B MANPATH
-Specifies directories to search for man pages.
-.TP
-.B LANG, LC_ALL
-Specifies language settings. Important for Turkish man pages.
-.SH EXIT STATUS
-.TP
-.B 0
-Successful completion.
-.TP
-.B 1
-Command not found or translation not available.
-.TP
-.B 2
-Invalid argument or parameter.
-.SH DEPENDENCIES
-.TP
-.B manpages-tr
-Turkish man pages package.
-.TP
-.B python3
-Python 3 interpreter (required).
-.TP
-.B python3-requests
-Python module for HTTP requests.
-.TP
-.B python3-typer
-Python module for CLI interface.
-.TP
-.B git
-Version control system (for installation and updates).
-.TP
-.B curl
-HTTP file download tool (for installation).
-.SH BUGS
-Known bugs and limitations:
-.IP \(bu 2
-Currently only works on Debian-based Linux distributions.
-.IP \(bu 2
-Some complex man pages may have formatting issues.
-.IP \(bu 2
-Only local sources are available when internet connection is not available.
-.IP \(bu 2
-Memory usage may increase for very large man pages.
-
-Bug reports: https://github.com/mmapro12/turkman/issues
-.SH AUTHOR
-Turkman was developed by mmapro12.
-.SH COPYRIGHT
-Copyright © 2025 mmapro12. Licensed under GPL-3.0 license.
-This is free software: you are free to change and redistribute it.
+.I /usr/share/man/tr/
+System-wide Turkish man pages
+.SH AUTHORS
+mmapro12 <asia172007@gmail.com>
+.SH REPORTING BUGS
+Report bugs on GitHub: https://github.com/mmapro12/turkman/issues
 .SH SEE ALSO
 .BR man (1),
-.BR manpages-tr (7),
-.BR sqlite3 (1),
-.BR git (1),
-.BR curl (1)
-
-Turkman documentation: https://github.com/mmapro12/turkman
-.br
-Translation repository: https://github.com/mmapro12/turkmandb
+.BR mandb (8)
