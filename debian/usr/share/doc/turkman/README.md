@@ -2,10 +2,10 @@
 
 <div align="center">
 
-[Version](https://img.shields.io/badge/version-0.6.1-blue.svg)](https://github.com/mmapro12/turkman/releases)
-[License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
-[Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
-[Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
+[![Version](https://img.shields.io/badge/version-0.6.2-blue.svg)](https://github.com/mmapro12/turkman/releases)
+[![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
+[![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
 
 **Linux komutlarının man sayfalarını Türkçeye çevirir ve ana dilinizde sistem dokümantasyonuna erişmenizi sağlar.**
 
@@ -32,17 +32,22 @@
 
 ```bash
 # .deb paketini indirin
-curl https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.1_all.deb -o turkman_0.6.1_all.deb
+curl https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.2_all.deb -o turkman_0.6.2_all.deb
 
 # Paketi kurun
-sudo dpkg -i turkman_0.6.1_all.deb
-sudo apt install -f  # Bağımlılıkları çöz
+sudo dpkg -i turkman_0.6.2_all.deb # hata verebilir aldırış etmeyin sonraki adıma geçin:
+sudo apt install -f  # Bağımlılıkları çözün
 ```
 
 ### 🔧 Script ile Kurulum
 
 ```bash
 curl -L https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh | sudo bash
+```
+
+### Indirdikten sonra:
+```bash
+turkman db sync # Turkmandb'yi init'lemek ve en güncel sürümde tutmak için turkman'ı indirdikten sonra bu komutu yazın.
 ```
 
 ### 📋 Sistem Gereksinimleri
@@ -71,16 +76,16 @@ turkman db sync
 
 ### 🔍 Çalışma Prensibi
 
-Turkman, bir komut için çeviri ararken şu **akıllı sıralamayı** takip eder:
+Turkman, bir komut için çeviri ararken şu **sıralamayı** takip eder:
 
 ```
-1️⃣ Yerel Türkçe Man Sayfaları (/usr/share/man/tr/)
+1️⃣ Yerel Tüürkçe Man Sayfaları (/usr/share/man/tr/)
     ↓ (Bulunamadıysa)
 2️⃣ Yerel SQLite Veritabanı (~/.turkmandb/)
     ↓ (Bulunamadıysa)  
 3️⃣ Yapay zeka ile çevirme (Geliştirme aşamasında)
-    ↓ (Bulunamadıysa)
-4️⃣ Orijinal İngilizce Man Sayfası (Yönlendirme)
+    ↓ (Yapılamazsa)
+4️⃣ Orijinall İngilizce Man Sayfası (Yönlendirme)
 ```
 
 ### 📊 Komut Referansı
@@ -116,7 +121,7 @@ ls -la ~/.turkmandb/
 Turkman, çevirileri yerel olarak önbelleğe aldığından internet bağlantısı olmadan da çalışabilir:
 
 ```bash
-# İlk seferinde çevirileri indir (turkman'ı indirdiğinizde bunu otomatikmen yapar)
+# İlk seferinde çevirileri indir
 turkman db sync
 
 # Artık çevrimdışı kullanabilirsiniz
@@ -153,13 +158,15 @@ graph TD
 turkman/
 ├── src/turkman/
 │   ├── __init__.py
-│   ├── turkman.py          # Ana CLI uygulaması
+│   ├── turkman.py         # Ana CLI uygulaması
 │   ├── db.py              # Veritabanı yönetimi
 │   ├── utils.py           # Yardımcı fonksiyonlar
 │   └── version.py         # Sürüm bilgisi
 ├── build_deb.sh           # .deb paketi oluşturma
+├── install.sh             # .deb paketi oluşturma ve indirme
 ├── setup.py               # Python paketi yapılandırması
 ├── README.md              # Bu dosya
+├── version.txt            # Sürüm bilgisi
 └── LICENSE                # GPL-3.0 lisansı
 ```
 

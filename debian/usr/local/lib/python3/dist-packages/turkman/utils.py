@@ -2,7 +2,6 @@ import requests
 import typer
 from turkman.version import __version__ 
 
-INSTALL_PATH = "/opt/turkman"
 TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkmandb"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/pages/"
