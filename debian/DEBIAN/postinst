@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+echo "🔧 Turkman kurulum sonrası yapılandırma..."
+
+if command -v turkman >/dev/null 2>&1; then
+    echo "📊 Veritabanı başlatılıyor..."
+    turkman db init || true
+    
+    echo "🔄 Çeviriler senkronize ediliyor..."
+    turkman db sync || true
+fi
+
 echo "✅ Turkman başarıyla kuruldu!"
 echo "💡 Kullanım: turkman <komut_adı>"
 echo "📖 Yardım: turkman --help"
