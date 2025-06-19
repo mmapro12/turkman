@@ -1,5 +1,5 @@
 Package: turkman
-Version: $1
+Version: 0.6.5
 Section: utils
 Priority: optional
 Architecture: all
