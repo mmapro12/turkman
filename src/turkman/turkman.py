@@ -131,7 +131,7 @@ def compare_versions(current: str, latest: str) -> bool:
     """Sürüm karşılaştırması yapar. True döndürürse güncelleme gerekir."""
     try:
         def version_tuple(version):
-            # v0.6.2 -> (0, 6, 2)
+            # v.6.2 -> (0, 6, 2)
             clean_version = version.lstrip('v')
             return tuple(map(int, clean_version.split('.')))
         
@@ -428,7 +428,7 @@ def update(
         try:
             typer.echo("🔧 Manuel güncelleme yapılıyor...")
             typer.echo("💡 En iyi deneyim için APT ile yeniden kurulum önerilir:")
-            typer.echo("   wget -qO- https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.2_all.deb | sudo dpkg -i -")
+            typer.echo("   wget -qO- https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.3_all.deb | sudo dpkg -i -")
             
             # Script ile güncelleme seçeneği sun
             script_update = typer.confirm("Script ile güncelleme yapmak ister misiniz?")
