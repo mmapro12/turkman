@@ -131,7 +131,6 @@ def check_updates(current_command: str) -> None:
         return
 
     current_version = get_version()
-    typer.echo(f"📋 Mevcut sürüm: {current_version}")
     release_info = get_latest_release_info()
     
     if not release_info:
@@ -139,8 +138,6 @@ def check_updates(current_command: str) -> None:
         raise typer.Exit(code=1)
     
     latest_version = release_info["tag_name"]
-    typer.echo(f"🆕 En son sürüm: {latest_version}")
-    
     needs_update = compare_versions(current_version, latest_version)
     
     if needs_update:
