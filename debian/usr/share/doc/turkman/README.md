@@ -4,7 +4,7 @@
 
 <img src="./imgs/turkman.png" width="400"/>
 
-[![Version](https://img.shields.io/badge/version-0.6.4-blue.svg)](https://github.com/mmapro12/turkman/releases)
+[![Version](https://img.shields.io/badge/version-0.6.5-blue.svg)](https://github.com/mmapro12/turkman/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
@@ -34,7 +34,7 @@
 
 ```bash
 # .deb paketini indirin
-curl -L -o turkman_0.6.4_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.4_all.deb
+curl -L -o turkman_0.6.5_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.5_all.deb
 
 # Paketi kurun
 sudo dpkg -i turkman_*_all.deb # hata verebilir aldırış etmeyin sonraki adıma geçin:

@@ -16,6 +16,7 @@ import turkman.utils as utils
 turkmandb.init_db()
 app = typer.Typer()
 db_app = typer.Typer()
+test_app = typer.Typer()
 
 TURKMAN_COMMANDS = ["db", "update", "uninstall", "version", "--help", "manpage"]
 TRPATH = "/usr/share/man/tr/"
@@ -113,108 +114,6 @@ def safe_man_display(content: str, command: str) -> bool:
         return False
 
 
-def get_latest_release_info():
-    """GitHub'dan en son sürüm bilgilerini alır."""
-    try:
-        response = requests.get(f"{GITHUB_API_URL}/releases/latest", timeout=10)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            typer.echo(f"❌ GitHub API'den sürüm bilgisi alınamadı: {response.status_code}", err=True)
-            return None
-    except Exception as e:
-        typer.echo(f"❌ GitHub API hatası: {e}", err=True)
-        return None
-
-
-def compare_versions(current: str, latest: str) -> bool:
-    """Sürüm karşılaştırması yapar. True döndürürse güncelleme gerekir."""
-    try:
-        def version_tuple(version):
-            # v.6.2 -> (0, 6, 2)
-            clean_version = version.lstrip('v')
-            return tuple(map(int, clean_version.split('.')))
-        
-        current_tuple = version_tuple(current)
-        latest_tuple = version_tuple(latest)
-        
-        return latest_tuple > current_tuple
-    except Exception as e:
-        typer.echo(f"❌ Sürüm karşılaştırma hatası: {e}", err=True)
-        return False
-
-
-def download_file(url: str, filepath: str) -> bool:
-    """Dosya indirir."""
-    try:
-        typer.echo(f"📥 İndiriliyor: {url}")
-        response = requests.get(url, stream=True, timeout=30)
-        response.raise_for_status()
-        
-        total_size = int(response.headers.get('content-length', 0))
-        downloaded = 0
-        
-        with open(filepath, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
-                    downloaded += len(chunk)
-                    if total_size > 0:
-                        progress = (downloaded / total_size) * 100
-                        print(f"\r📊 İlerleme: {progress:.1f}%", end='', flush=True)
-        
-        print()  # Yeni satır
-        typer.echo("✅ İndirme tamamlandı!")
-        return True
-    except Exception as e:
-        typer.echo(f"❌ İndirme hatası: {e}", err=True)
-        return False
-
-
-def is_installed_via_apt() -> bool:
-    """Turkman'ın apt ile kurulu olup olmadığını kontrol eder."""
-    try:
-        result = subprocess.run(
-            ["dpkg", "-l", "turkman"], 
-            capture_output=True, 
-            text=True, 
-            timeout=5
-        )
-        return result.returncode == 0 and "ii" in result.stdout
-    except Exception:
-        return False
-
-
-def is_installed_via_pip() -> bool:
-    """Turkman'ın pip ile kurulu olup olmadığını kontrol eder."""
-    try:
-        result = subprocess.run(
-            ["pip", "show", "turkman"], 
-            capture_output=True, 
-            text=True, 
-            timeout=5
-        )
-        return result.returncode == 0
-    except Exception:
-        return False
-
-
-def get_turkman_executable_path() -> str | None:
-    """Turkman executable'ının yolunu bulur."""
-    try:
-        result = subprocess.run(
-            ["which", "turkman"], 
-            capture_output=True, 
-            text=True, 
-            timeout=5
-        )
-        if result.returncode == 0:
-            return result.stdout.strip()
-    except Exception:
-        pass
-    return None
-
-
 @app.command()
 def uninstall(
     force: bool = typer.Option(False, "--force", "-f", help="Zorla kaldır, onay isteme"),
@@ -225,9 +124,9 @@ def uninstall(
     typer.echo("=" * 40)
     
     # Kurulum türünü tespit et
-    apt_installed = is_installed_via_apt()
-    pip_installed = is_installed_via_pip()
-    executable_path = get_turkman_executable_path()
+    apt_installed = utils.is_installed_via_apt()
+    pip_installed = utils.is_installed_via_pip()
+    executable_path = utils.get_turkman_executable_path()
     
     if not apt_installed and not pip_installed and not executable_path:
         typer.echo("❌ Turkman kurulu görünmüyor!")
@@ -321,8 +220,8 @@ def update(
     typer.echo(f"📋 Mevcut sürüm: {current_version}")
     
     # En son sürümü kontrol et
-    typer.echo("🔍 En son sürüm kontrol ediliyor...")
-    release_info = get_latest_release_info()
+    typer.echo("🔍 en son sürüm kontrol ediliyor...")
+    release_info = utils.get_latest_release_info()
     
     if not release_info:
         typer.echo("❌ Sürüm bilgisi alınamadı. İnternet bağlantınızı kontrol edin.")
@@ -332,7 +231,7 @@ def update(
     typer.echo(f"🆕 En son sürüm: {latest_version}")
     
     # Sürüm karşılaştırması
-    needs_update = compare_versions(current_version, latest_version)
+    needs_update = utils.compare_versions(current_version, latest_version)
     
     if not needs_update and not force:
         typer.echo("✅ Turkman zaten en son sürümde!")
@@ -360,8 +259,8 @@ def update(
         typer.echo(clean_body[:500] + "..." if len(clean_body) > 500 else clean_body)
     
     # Kurulum türünü tespit et
-    apt_installed = is_installed_via_apt()
-    pip_installed = is_installed_via_pip()
+    apt_installed = utils.is_installed_via_apt()
+    pip_installed = utils.is_installed_via_pip()
     
     # Onay al
     if not force:
@@ -393,7 +292,7 @@ def update(
                 deb_path = os.path.join(temp_dir, deb_asset["name"])
                 
                 # .deb dosyasını indir
-                if not download_file(deb_asset["browser_download_url"], deb_path):
+                if not utils.download_file(deb_asset["browser_download_url"], deb_path):
                     raise typer.Exit(code=1)
                 
                 # Paketi yükle
@@ -439,7 +338,7 @@ def update(
                 with tempfile.TemporaryDirectory() as temp_dir:
                     script_path = os.path.join(temp_dir, "install.sh")
                     
-                    if download_file(install_script_url, script_path):
+                    if utils.download_file(install_script_url, script_path):
                         os.chmod(script_path, 0o755)
                         subprocess.run([script_path], check=True)
                         typer.echo("✅ Script güncelleme tamamlandı!")
@@ -540,6 +439,12 @@ def init():
         typer.echo(f"❌ Veritabanı başlatmada hata: {e}", err=True)
 
 
+@test_app.command()
+def push():
+    """Bu bir test komutudur."""
+    typer.echo("Merhaba ertu kardeş.")
+
+
 def handle_man_command(command: str):
     """Man sayfası komutunu işler."""
     typer.echo(f"🔍 '{command}' komutu araştırılıyor...")
@@ -589,6 +494,9 @@ def main():
 
 
 app.add_typer(db_app, name="db")
+app.add_typer(test_app, name="test")
 
 if __name__ == "__main__":
     main()
+
+
