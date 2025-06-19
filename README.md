@@ -34,7 +34,7 @@
 
 ```bash
 # .deb paketini indirin
-curl https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.3_all.deb -o turkman_0.6.3_all.deb
+curl -L -o turkman_0.6.3_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.3_all.deb
 
 # Paketi kurun
 sudo dpkg -i turkman_*_all.deb # hata verebilir aldırış etmeyin sonraki adıma geçin:
