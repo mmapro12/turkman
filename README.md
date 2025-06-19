@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="./imgs/turkman.png" width="400"/>
+<img src="./images/turkman.png" width="400"/>
 
 [![Version](https://img.shields.io/badge/version-0.6.5-blue.svg)](https://github.com/mmapro12/turkman/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
