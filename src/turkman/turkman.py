@@ -12,7 +12,9 @@ import json
 import re
 import turkman.db as turkmandb
 import turkman.utils as utils
+from rich.console import Console
 
+console = Console()
 turkmandb.init_db()
 app = typer.Typer()
 db_app = typer.Typer()
@@ -33,7 +35,7 @@ def check_local_translation(command: str) -> bool:
             result = subprocess.run(["man", "-L", "tr", command], stdin=subprocess.DEVNULL)
             return result.returncode == 0
     except Exception as e:
-        typer.echo(f"Yerel çeviri kontrolünde hata: {e}", err=True)
+        typer.echo(f"Yerel çeviri kontrolünde hata: {e}")
     return False
 
 
@@ -45,7 +47,7 @@ def check_github_translation(command: str) -> str | None:
         if response.status_code == 200:
             return response.text
     except Exception as e:
-        typer.echo(f"GitHub çeviri kontrolünde hata: {e}", err=True)
+        typer.echo(f"GitHub çeviri kontrolünde hata: {e}")
     return None
 
 
@@ -54,7 +56,7 @@ def check_db_translation(command: str) -> str | None:
     try:
         return turkmandb.get_translation(command)
     except Exception as e:
-        typer.echo(f"Veritabanı çeviri kontrolünde hata: {e}", err=True)
+        typer.echo(f"Veritabanı çeviri kontrolünde hata: {e}")
     return None
 
 
@@ -120,8 +122,8 @@ def uninstall(
     keep_data: bool = typer.Option(False, "--keep-data", help="Kullanıcı verilerini sakla")
 ):
     """Turkman'ı sistemden kaldırır."""
-    typer.echo("🗑️  Turkman Kaldırma İşlemi")
-    typer.echo("=" * 40)
+    console.print("🗑️  Turkman Kaldırma İşlemi")
+    console.print("=" * 40)
     
     # Kurulum türünü tespit et
     apt_installed = utils.is_installed_via_apt()
@@ -133,13 +135,13 @@ def uninstall(
         raise typer.Exit(code=1)
     
     # Kurulum bilgilerini göster
-    typer.echo("📋 Kurulum Durumu:")
+    console.print("📋 Kurulum Durumu:")
     if apt_installed:
-        typer.echo("   • APT paketi: ✅ Kurulu")
+        console.print("   • APT paketi: ✅ Kurulu")
     if pip_installed:
-        typer.echo("   • Python paketi: ✅ Kurulu")
+        console.print("   • Python paketi: ✅ Kurulu")
     if executable_path:
-        typer.echo(f"   • Executable: {executable_path}")
+        console.print(f"   • Executable: {executable_path}")
     
     # Kullanıcı verilerini kontrol et
     home_dir = Path.home()
@@ -147,63 +149,62 @@ def uninstall(
     has_user_data = turkmandb_path.exists()
     
     if has_user_data:
-        typer.echo(f"📁 Kullanıcı verileri: {turkmandb_path}")
+        console.print(f"📁 Kullanıcı verileri: {turkmandb_path}")
         if not keep_data:
-            typer.echo("⚠️  Kullanıcı verileri de silinecek!")
+            console.print("⚠️  Kullanıcı verileri de silinecek!")
     
     # Onay al
     if not force:
         confirm = typer.confirm("Turkman'ı kaldırmak istediğinizden emin misiniz?")
         if not confirm:
-            typer.echo("❌ İşlem iptal edildi.")
+            console.print("❌ İşlem iptal edildi.")
             raise typer.Exit(code=0)
     
-    typer.echo("\n🔄 Kaldırma işlemi başlatılıyor...")
+    console.print("\n🔄 Kaldırma işlemi başlatılıyor...")
     
     if apt_installed:
         try:
-            typer.echo("📦 APT paketi kaldırılıyor...")
+            console.print("📦 APT paketi kaldırılıyor...")
             subprocess.run(["sudo", "apt", "remove", "-y", "turkman"], check=True)
-            typer.echo("✅ APT paketi kaldırıldı!")
+            console.print("✅ APT paketi kaldırıldı!")
         except subprocess.CalledProcessError as e:
-            typer.echo(f"❌ APT paketi kaldırma hatası: {e}", err=True)
+            console.print(f"❌ APT paketi kaldırma hatası: {e}")
         except Exception as e:
-            typer.echo(f"❌ Beklenmeyen hata: {e}", err=True)
+            console.print(f"❌ Beklenmeyen hata: {e}")
     
-    # Python paketini kaldır
     if pip_installed:
         try:
-            typer.echo("🐍 Python paketi kaldırılıyor...")
+            console.print("🐍 Python paketi kaldırılıyor...")
             subprocess.run(["pip", "uninstall", "-y", "turkman"], check=True)
-            typer.echo("✅ Python paketi kaldırıldı!")
+            console.print("✅ Python paketi kaldırıldı!")
         except subprocess.CalledProcessError as e:
-            typer.echo(f"❌ Python paketi kaldırma hatası: {e}", err=True)
+            console.print(f"❌ Python paketi kaldırma hatası: {e}")
         except Exception as e:
-            typer.echo(f"❌ Beklenmeyen hata: {e}", err=True)
+            console.print(f"❌ Beklenmeyen hata: {e}")
     
     # Manuel yükleme dosyalarını kaldır
     if executable_path and "/usr/local/bin" in executable_path:
         try:
-            typer.echo("🗂️  Manuel yükleme dosyaları kaldırılıyor...")
+            console.print("🗂️  Manuel yükleme dosyaları kaldırılıyor...")
             os.remove(executable_path)
-            typer.echo("✅ Manuel yükleme dosyaları kaldırıldı!")
+            console.print("✅ Manuel yükleme dosyaları kaldırıldı!")
         except Exception as e:
-            typer.echo(f"❌ Manuel dosya kaldırma hatası: {e}", err=True)
+            console.print(f"❌ Manuel dosya kaldırma hatası: {e}")
     
     # Kullanıcı verilerini kaldır
     if has_user_data and not keep_data:
         try:
-            typer.echo("🗄️  Kullanıcı verileri kaldırılıyor...")
+            console.print("🗄️  Kullanıcı verileri kaldırılıyor...")
             shutil.rmtree(turkmandb_path)
-            typer.echo("✅ Kullanıcı verileri kaldırıldı!")
+            console.print("✅ Kullanıcı verileri kaldırıldı!")
         except Exception as e:
-            typer.echo(f"❌ Kullanıcı verisi kaldırma hatası: {e}", err=True)
+            console.print(f"❌ Kullanıcı verisi kaldırma hatası: {e}")
     elif has_user_data and keep_data:
-        typer.echo(f"💾 Kullanıcı verileri korundu: {turkmandb_path}")
+        console.print(f"💾 Kullanıcı verileri korundu: {turkmandb_path}")
     
-    typer.echo("\n🎉 Turkman başarıyla kaldırıldı!")
+    console.print("\n🎉 Turkman başarıyla kaldırıldı!")
     if keep_data and has_user_data:
-        typer.echo("💡 Verilerinizi tekrar kullanmak için Turkman'ı yeniden yükleyebilirsiniz.")
+        console.print("💡 Verilerinizi tekrar kullanmak için Turkman'ı yeniden yükleyebilirsiniz.")
 
 
 @app.command()
@@ -212,29 +213,29 @@ def update(
     check_only: bool = typer.Option(False, "--check", "-c", help="Sadece güncelleme kontrolü yap")
 ):
     """Turkman'ı günceller."""
-    typer.echo("🔄 Turkman Güncelleme İşlemi")
-    typer.echo("=" * 40)
+    console.print("🔄 Turkman Güncelleme İşlemi")
+    console.print("=" * 40)
     
     # Mevcut sürümü al
     current_version = utils.get_version()
-    typer.echo(f"📋 Mevcut sürüm: {current_version}")
+    console.print(f"📋 Mevcut sürüm: {current_version}")
     
     # En son sürümü kontrol et
-    typer.echo("🔍 en son sürüm kontrol ediliyor...")
+    console.print("🔍 en son sürüm kontrol ediliyor...")
     release_info = utils.get_latest_release_info()
     
     if not release_info:
-        typer.echo("❌ Sürüm bilgisi alınamadı. İnternet bağlantınızı kontrol edin.")
+        console.print("❌ Sürüm bilgisi alınamadı. İnternet bağlantınızı kontrol edin.")
         raise typer.Exit(code=1)
     
     latest_version = release_info["tag_name"]
-    typer.echo(f"🆕 En son sürüm: {latest_version}")
+    console.print(f"🆕 En son sürüm: {latest_version}")
     
     # Sürüm karşılaştırması
     needs_update = utils.compare_versions(current_version, latest_version)
     
     if not needs_update and not force:
-        typer.echo("✅ Turkman zaten en son sürümde!")
+        console.print("✅ Turkman zaten en son sürümde!")
         if check_only:
             raise typer.Exit(code=0)
         
@@ -244,19 +245,19 @@ def update(
     
     if check_only:
         if needs_update:
-            typer.echo("🔔 Güncelleme mevcut!")
-            typer.echo(f"💡 Güncellemek için: turkman update")
+            console.print("🔔 Güncelleme mevcut!")
+            console.print("💡 Güncellemek için: turkman update")
         else:
-            typer.echo("✅ Güncelleme gerekmiyor.")
+            console.print("✅ Güncelleme gerekmiyor.")
         raise typer.Exit(code=0)
     
     # Güncelleme bilgilerini göster
     if needs_update or force:
-        typer.echo("\n📄 Sürüm Notları:")
+        console.print("\n📄 Sürüm Notları:")
         body = release_info.get("body", "Sürüm notları mevcut değil.")
         # Markdown'ı basit metne çevir
         clean_body = re.sub(r'[#*`]', '', body)
-        typer.echo(clean_body[:500] + "..." if len(clean_body) > 500 else clean_body)
+        console.print(clean_body[:500] + "..." if len(clean_body) > 500 else clean_body)
     
     # Kurulum türünü tespit et
     apt_installed = utils.is_installed_via_apt()
@@ -266,15 +267,15 @@ def update(
     if not force:
         confirm = typer.confirm(f"\n{latest_version} sürümüne güncellemek istiyor musunuz?")
         if not confirm:
-            typer.echo("❌ Güncelleme iptal edildi.")
+            console.print("❌ Güncelleme iptal edildi.")
             raise typer.Exit(code=0)
     
-    typer.echo("\n🚀 Güncelleme başlatılıyor...")
+    console.print("\n🚀 Güncelleme başlatılıyor...")
     
     # APT ile güncelleme
     if apt_installed:
         try:
-            typer.echo("📦 APT ile güncelleme yapılıyor...")
+            console.print("📦 APT ile güncelleme yapılıyor...")
             
             # .deb dosyasını bul
             deb_asset = None
@@ -284,7 +285,7 @@ def update(
                     break
             
             if not deb_asset:
-                typer.echo("❌ .deb dosyası bulunamadı!", err=True)
+                console.print("❌ .deb dosyası bulunamadı!")
                 raise typer.Exit(code=1)
             
             # Geçici dizin oluştur
@@ -296,77 +297,77 @@ def update(
                     raise typer.Exit(code=1)
                 
                 # Paketi yükle
-                typer.echo("📦 Paket yükleniyor...")
+                console.print("📦 Paket yükleniyor...")
                 subprocess.run(["sudo", "dpkg", "-i", deb_path], check=True)
                 subprocess.run(["sudo", "apt", "install", "-f", "-y"], check=True)
                 
-                typer.echo("✅ APT güncelleme tamamlandı!")
+                console.print("✅ APT güncelleme tamamlandı!")
         
         except subprocess.CalledProcessError as e:
-            typer.echo(f"❌ APT güncelleme hatası: {e}", err=True)
+            console.print(f"❌ APT güncelleme hatası: {e}")
             raise typer.Exit(code=1)
         except Exception as e:
-            typer.echo(f"❌ Beklenmeyen hata: {e}", err=True)
+            console.print(f"❌ Beklenmeyen hata: {e}")
             raise typer.Exit(code=1)
     
     # Python paketi ile güncelleme
     elif pip_installed:
         try:
-            typer.echo("🐍 Python paketi güncelleniyor...")
+            console.print("🐍 Python paketi güncelleniyor...")
             subprocess.run(["pip", "install", "--upgrade", "turkman"], check=True)
-            typer.echo("✅ Python paketi güncelleme tamamlandı!")
+            console.print("✅ Python paketi güncelleme tamamlandı!")
         except subprocess.CalledProcessError as e:
-            typer.echo(f"❌ Python paketi güncelleme hatası: {e}", err=True)
+            console.print(f"❌ Python paketi güncelleme hatası: {e}")
             raise typer.Exit(code=1)
         except Exception as e:
-            typer.echo(f"❌ Beklenmeyen hata: {e}", err=True)
+            console.print(f"❌ Beklenmeyen hata: {e}")
             raise typer.Exit(code=1)
     
     else:
         try:
-            typer.echo("🔧 Manuel güncelleme yapılıyor...")
+            console.print("🔧 Manuel güncelleme yapılıyor...")
             install_script = """
             git clone https://github.com/mmapro12/turkman.git /tmp/turkman/
             cd /tmp/turkman/ && ./install.sh
             rm -rf /tmp/turkman/
             """
             subprocess.run(install_script, shell=True, check=True)
-            typer.echo("✅ Script güncelleme tamamlandı!")
+            console.print("✅ Script güncelleme tamamlandı!")
         
         except Exception as e:
-            typer.echo(f"❌ Manuel güncelleme hatası: {e}", err=True)
+            console.print(f"❌ Manuel güncelleme hatası: {e}")
             raise typer.Exit(code=1)
     
     # Veritabanını güncelle
     try:
-        typer.echo("🗄️  Veritabanı güncelleniyor...")
+        console.print("🗄️  Veritabanı güncelleniyor...")
         turkmandb.get_turkmandb()
-        typer.echo("✅ Veritabanı güncellendi!")
+        console.print("✅ Veritabanı güncellendi!")
     except Exception as e:
-        typer.echo(f"⚠️  Veritabanı güncelleme hatası: {e}", err=True)
-        typer.echo("💡 'turkman db sync' komutunu daha sonra çalıştırabilirsiniz.")
+        console.print(f"⚠️  Veritabanı güncelleme hatası: {e}")
+        console.print("💡 'turkman db sync' komutunu daha sonra çalıştırabilirsiniz.")
     
     # Güncelleme sonrası doğrulama
     try:
         new_version = utils.get_version()
-        typer.echo(f"\n🎉 Güncelleme tamamlandı!")
-        typer.echo(f"📋 Eski sürüm: {current_version}")
-        typer.echo(f"📋 Yeni sürüm: {new_version}")
+        console.print("\n🎉 Güncelleme tamamlandı!")
+        console.print(f"📋 Eski sürüm: {current_version}")
+        console.print(f"📋 Yeni sürüm: {new_version}")
         
         if new_version != current_version:
-            typer.echo("✅ Sürüm başarıyla güncellendi!")
+            console.print("✅ Sürüm başarıyla güncellendi!")
         else:
-            typer.echo("⚠️  Sürüm numarası değişmedi, kontrol edin.")
+            console.print("⚠️  Sürüm numarası değişmedi, kontrol edin.")
     
     except Exception as e:
-        typer.echo(f"❌ Sürüm doğrulama hatası: {e}", err=True)
+        console.print(f"❌ Sürüm doğrulama hatası: {e}")
 
 
 @app.command()
 def version():
     """Turkman sürümünü gösterir."""
-    typer.echo(f"Turkman CLI {utils.get_version()}")
-    typer.echo(f"En yeni sürüm: {utils.get_latest_version()}")
+    console.print(f"Turkman CLI {utils.get_version()}")
+    console.print(f"En yeni sürüm: {utils.get_latest_version()}")
 
 
 @app.command()
@@ -379,26 +380,26 @@ def manpage(command: str):
     # Sonra veritabanını kontrol et
     db_translation = check_db_translation(command)
     if db_translation:
-        typer.echo(f"📖 '{command}' için Türkçe man sayfası gösteriliyor (veritabanından)...")
+        console.print(f"📖 '{command}' için Türkçe man sayfası gösteriliyor (veritabanından)...")
         if safe_man_display(db_translation, command):
             return
         else:
-            typer.echo("Man sayfası gösteriminde sorun oluştu.", err=True)
+            console.print("Man sayfası gösteriminde sorun oluştu.")
             return
     
     # GitHub'dan kontrol et (yedek olarak)
     github_translation = check_github_translation(command)
     if github_translation:
-        typer.echo(f"📖 '{command}' için Türkçe man sayfası gösteriliyor (GitHub'dan)...")
+        console.print(f"📖 '{command}' için Türkçe man sayfası gösteriliyor (GitHub'dan)...")
         if safe_man_display(github_translation, command):
             return
         else:
-            typer.echo("Man sayfası gösteriminde sorun oluştu, ham içerik gösteriliyor:", err=True)
-            typer.echo(github_translation)
+            console.print("Man sayfası gösteriminde sorun oluştu, ham içerik gösteriliyor:")
+            console.print(github_translation)
             return
 
-    typer.echo(f"❌ '{command}' için Türkçe çeviri bulunamadı.", err=True)
-    typer.echo(f"💡 Orijinal İngilizce man sayfasını görmek için: man {command}")
+    console.print(f"❌ '{command}' için Türkçe çeviri bulunamadı.")
+    console.print(f"💡 Orijinal İngilizce man sayfasını görmek için: man {command}")
 
 
 @db_app.command()
@@ -406,11 +407,11 @@ def sync():
     """Turkmandb'nin en yeni sürümünü getirir."""
     try:
         turkmandb.init_db()
-        typer.echo("🔄 Veritabanı senkronize ediliyor...")
+        console.print("🔄 Veritabanı senkronize ediliyor...")
         turkmandb.get_turkmandb()
-        typer.echo("✅ Veritabanı senkronizasyonu tamamlandı!")
+        console.print("✅ Veritabanı senkronizasyonu tamamlandı!")
     except Exception as e:
-        typer.echo(f"❌ Veritabanı senkronizasyonunda hata: {e}", err=True)
+        console.print(f"❌ Veritabanı senkronizasyonunda hata: {e}")
 
 
 @db_app.command()
@@ -418,9 +419,9 @@ def init():
     """Turkmandb'yi .turkmandb dizini altında oluşturur."""
     try:
         turkmandb.init_db()
-        typer.echo("✅ Veritabanı başlatıldı!")
+        console.print("✅ Veritabanı başlatıldı!")
     except Exception as e:
-        typer.echo(f"❌ Veritabanı başlatmada hata: {e}", err=True)
+        console.print(f"❌ Veritabanı başlatmada hata: {e}")
 
 
 @test_app.command()
@@ -431,26 +432,26 @@ def push():
 
 def handle_man_command(command: str):
     """Man sayfası komutunu işler."""
-    typer.echo(f"🔍 '{command}' komutu araştırılıyor...")
+    console.print(f"🔍 '{command}' komutu araştırılıyor...")
     
     if check_command(command):
         manpage(command)
     else:
-        typer.echo(f"❌ '{command}' adında bir komut bulunamadı veya man sayfası okunamıyor.", err=True)
+        console.print(f"❌ '{command}' adında bir komut bulunamadı veya man sayfası okunamıyor.")
         
         try:
             result = subprocess.run(["man", "-w", command], capture_output=True, text=True)
             if result.returncode == 0:
-                typer.echo(f"🔧 Debug: Man sayfası yolu bulundu ama okunamıyor: {result.stdout.strip()}")
+                console.print(f"🔧 Debug: Man sayfası yolu bulundu ama okunamıyor: {result.stdout.strip()}")
             else:
-                typer.echo(f"🔧 Debug: Man sayfası yolu bulunamadı")
+                console.print(f"🔧 Debug: Man sayfası yolu bulunamadı")
         except Exception as e:
-            typer.echo(f"🔧 Debug: Komut kontrolünde hata: {e}")
+            console.print(f"🔧 Debug: Komut kontrolünde hata: {e}")
         
-        typer.echo(f"💡 Alternatif çözümler:")
-        typer.echo(f"   • Orijinal man sayfasını deneyin: man {command}")
-        typer.echo(f"   • Komut doğru yazıldı mı kontrol edin")
-        typer.echo(f"   • Man sayfaları güncel mi kontrol edin: sudo mandb")
+        console.print(f"💡 Alternatif çözümler:")
+        console.print(f"   • Orijinal man sayfasını deneyin: man {command}")
+        console.print(f"   • Komut doğru yazıldı mı kontrol edin")
+        console.print(f"   • Man sayfaları güncel mi kontrol edin: sudo mandb")
         
         raise typer.Exit(code=1)
 
@@ -470,10 +471,10 @@ def main():
         else:
             app()
     except KeyboardInterrupt:
-        typer.echo("\n🚫 İşlem kullanıcı tarafından iptal edildi.")
+        console.print("\n🚫 İşlem kullanıcı tarafından iptal edildi.")
         sys.exit(1)
     except Exception as e:
-        typer.echo(f"❌ Beklenmeyen hata: {e}", err=True)
+        console.print(f"❌ Beklenmeyen hata: {e}")
         sys.exit(1)
 
 
