@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "TURKMAN KURULUM SCRIPT"
+
 DISTRO_FAMILY=$(grep '^ID_LIKE=' /etc/os-release | cut -d= -f2 | tr -d '"')
 VERSION=$(python3 -c "import sys; sys.path.insert(0, 'src'); from turkman.version import __version__; print(__version__)")
 PACKAGE_NAME="turkman"
