@@ -1,14 +1,20 @@
+altgraph==0.17.4
 certifi==2025.1.31
 charset-normalizer==3.4.1
 click==8.1.8
 idna==3.10
 markdown-it-py==3.0.0
 mdurl==0.1.2
+packaging==25.0
 Pygments==2.19.1
+pyinstaller==6.14.1
+pyinstaller-hooks-contrib==2025.5
 requests==2.32.3
 rich==13.9.4
 setuptools==80.9.0
 shellingham==1.5.4
+stdeb==0.10.0
+-e git+ssh://git@github.com/mmapro12/turkman.git@d3ebc510c8142d868e638dd3ab7889077906f84b#egg=turkman
 typer==0.15.2
 typing_extensions==4.12.2
 urllib3==2.3.0

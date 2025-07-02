@@ -18,7 +18,7 @@ app = typer.Typer()
 db_app = typer.Typer()
 test_app = typer.Typer()
 
-TURKMAN_COMMANDS = ["db", "update", "uninstall", "version", "--help", "manpage"]
+TURKMAN_COMMANDS = ["db", "update", "uninstall", "version", "--help", "manpage", "test"]
 TRPATH = "/usr/share/man/tr/"
 GITHUB_REPO = "mmapro12/turkmandb"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/pages/"
@@ -322,32 +322,16 @@ def update(
             typer.echo(f"❌ Beklenmeyen hata: {e}", err=True)
             raise typer.Exit(code=1)
     
-    # Manuel kurulum güncelleme
     else:
         try:
             typer.echo("🔧 Manuel güncelleme yapılıyor...")
-            typer.echo("💡 En iyi deneyim için APT ile yeniden kurulum önerilir:")
-            typer.echo("   wget -qO- https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.3_all.deb | sudo dpkg -i -")
-            
-            # Script ile güncelleme seçeneği sun
-            script_update = typer.confirm("Script ile güncelleme yapmak ister misiniz?")
-            if script_update:
-                # Install script'i çalıştır
-                install_script_url = "https://raw.githubusercontent.com/mmapro12/turkman/main/install.sh"
-                
-                with tempfile.TemporaryDirectory() as temp_dir:
-                    script_path = os.path.join(temp_dir, "install.sh")
-                    
-                    if utils.download_file(install_script_url, script_path):
-                        os.chmod(script_path, 0o755)
-                        subprocess.run([script_path], check=True)
-                        typer.echo("✅ Script güncelleme tamamlandı!")
-                    else:
-                        raise Exception("Install script indirilemedi")
-            else:
-                typer.echo("💡 Manuel güncelleme için:")
-                typer.echo("   git clone https://github.com/mmapro12/turkman.git")
-                typer.echo("   cd turkman && ./install.sh")
+            install_script = """
+            git clone https://github.com/mmapro12/turkman.git /tmp/turkman/
+            cd /tmp/turkman/ && ./install.sh
+            rm -rf /tmp/turkman/
+            """
+            subprocess.run(install_script, shell=True, check=True)
+            typer.echo("✅ Script güncelleme tamamlandı!")
         
         except Exception as e:
             typer.echo(f"❌ Manuel güncelleme hatası: {e}", err=True)

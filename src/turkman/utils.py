@@ -20,6 +20,8 @@ def get_latest_release_info():
     except Exception as e:
         typer.echo(f"❌ GitHub API hatası: {e}", err=True)
         return None
+
+
 def compare_versions(current: str, latest: str) -> bool:
     """Sürüm karşılaştırması yapar. True döndürürse güncelleme gerekir."""
     try:
@@ -106,6 +108,8 @@ def get_turkman_executable_path() -> str | None:
     except Exception:
         pass
     return None
+
+
 def get_version():
     """Turkman versiyonunu getirir."""
     return __version__

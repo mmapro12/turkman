@@ -11,6 +11,8 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+echo -e "${BLUE}🔧 Turkman bin  dosyası oluşturuluyor...${NC}"
+
 echo -e "${BLUE}🔧 Turkman .deb paketi oluşturuluyor...${NC}"
 
 VERSION=$(python3 -c "import sys; sys.path.insert(0, 'src'); from turkman.version import __version__; print(__version__)")
@@ -20,11 +22,10 @@ MAINTAINER="mmapro12 <asia172007@gmail.com>"
 
 echo -e "${YELLOW}📦 Paket: ${PACKAGE_NAME} v${VERSION}${NC}"
 
-rm -rf build/ dist/ debian/ *.deb
+rm -rf build/ debian/ *.deb
 
 mkdir -p debian/DEBIAN
 mkdir -p debian/usr/local/bin
-mkdir -p debian/usr/local/lib/python3/dist-packages/turkman
 mkdir -p debian/usr/share/doc/turkman
 mkdir -p debian/usr/share/man/man1
 
@@ -160,31 +161,8 @@ EOF
 chmod 755 debian/DEBIAN/postinst
 chmod 755 debian/DEBIAN/prerm
 
-# Python dosyalarını kopyala
-echo -e "${YELLOW}📁 Python dosyaları kopyalanıyor...${NC}"
-cp -r src/turkman/* debian/usr/local/lib/python3/dist-packages/turkman/
-
 # Ana executable script oluştur
-cat > debian/usr/local/bin/turkman << 'EOF'
-#!/usr/bin/env python3
-import sys
-import os
-
-# Turkman'ı Python path'ine ekle
-sys.path.insert(0, '/usr/local/lib/python3/dist-packages')
-
-try:
-    from turkman.turkman import main
-    main()
-except ImportError as e:
-    print(f"❌ Turkman modülleri yüklenemedi: {e}")
-    print("🔧 Paket yeniden kurulumu gerekebilir: sudo apt reinstall turkman")
-    sys.exit(1)
-except Exception as e:
-    print(f"❌ Beklenmeyen hata: {e}")
-    sys.exit(1)
-EOF
-
+cp -r dist/turkman debian/usr/local/bin/turkman
 chmod +x debian/usr/local/bin/turkman
 
 # Dokümantasyon dosyalarını kopyala
@@ -216,7 +194,7 @@ dpkg-deb --contents "${PACKAGE_FILE}"
 # Kurulum talimatları
 echo -e "${GREEN}🚀 Kurulum için:${NC}"
 echo -e "${BLUE}   sudo dpkg -i ${PACKAGE_FILE}${NC}"
-echo -e "${BLUE}   sudo apt-get install -f  # Bağımlılık sorunları varsa${NC}"
+echo -e "${BLUE}   sudo apt install -f  # Bağımlılık sorunları varsa${NC}"
 
 # Temizlik seçeneği
 read -p "🧹 Geçici dosyaları temizle? (y/N): " -n 1 -r

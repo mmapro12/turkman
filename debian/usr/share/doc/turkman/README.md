@@ -2,9 +2,9 @@
 
 <div align="center">
 
-<img src="./imgs/turkman.png" width="400"/>
+<img src="./images/turkman.png" width="400"/>
 
-[![Version](https://img.shields.io/badge/version-0.6.5-blue.svg)](https://github.com/mmapro12/turkman/releases)
+[![Version](https://img.shields.io/badge/version-0.7.0-blue.svg)](https://github.com/mmapro12/turkman/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
@@ -34,7 +34,7 @@
 
 ```bash
 # .deb paketini indirin
-curl -L -o turkman_0.6.5_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.5_all.deb
+curl -L -o turkman_0.7.0_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.7.0_all.deb
 
 # Paketi kurun
 sudo dpkg -i turkman_*_all.deb # hata verebilir aldırış etmeyin sonraki adıma geçin:
@@ -42,6 +42,8 @@ sudo apt install -f  # Bağımlılıkları çözün
 ```
 
 ### 🔧 Script ile Kurulum (dev)
+
+Bu script ile herhangi bir dağıtımda turkman'ı kurabilirsiniz:
 
 ```bash
 git clone https://github.com/mmapro12/turkman.git
@@ -52,16 +54,17 @@ cd ..
 rm -rf turkman
 ```
 
-### Indirdikten sonra:
+### İndirdikten sonra:
 ```bash
 turkman db sync # Turkmandb'yi init'lemek ve en güncel sürümde tutmak için turkman'ı indirdikten sonra bu komutu yazın.
 ```
 
 ### 📋 Sistem Gereksinimleri
 
-- **İşletim Sistemi**: Ubuntu 18.04+, Debian 10+, Linux Mint 19+, Pardus 21+
+- **İşletim Sistemi**: Tüm Linux işletim sistemleri desteklidir.
 - **Python**: 3.8 veya üzeri
 - **Bağımlılıklar**: `manpages-tr`, `python3-requests`, `python3-typer`
+- Turkman'ı install.sh script'tinden indiriyorsanız manpages-tr'ı indirmenize gerek yok. Otomatikmen kurulur.
 
 ---
 

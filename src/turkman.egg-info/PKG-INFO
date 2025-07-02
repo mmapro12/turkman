@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: turkman
-Version: 0.6.1
+Version: 0.6.5
 Summary: Türkçe Unix/Linux man sayfaları için CLI aracı
 Home-page: https://github.com/mmapro12/turkman
 Author: mmapro12
@@ -42,259 +42,184 @@ Dynamic: requires-dist
 Dynamic: requires-python
 Dynamic: summary
 
-# Turkman: Linux için Türkçe Man sayfaları çevirisi ve zenginleştirme uygulaması
+# Turkman - Linux için Türkçe Man Sayfaları
 
-## 📖 İçindekiler
+<div align="center">
 
-1. [Genel Bakış](#genel-bakış)
-2. [Kurulum](#kurulum)
-3. [Kullanım](#kullanım)
-4. [Komut Referansı](#komut-referansı)
-5. [Teknik Mimari](#teknik-mimari)
-6. [Katkıda Bulunma](#katkıda-bulunma)
-7. [Sorun Giderme](#sorun-giderme)
-8. [SSS](#sss)
+<img src="./images/turkman.png" width="400"/>
 
----
+[![Version](https://img.shields.io/badge/version-0.6.5-blue.svg)](https://github.com/mmapro12/turkman/releases)
+[![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
+[![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
 
-## 🎯 Genel Bakış
+**Linux komutlarının man sayfalarını Türkçeye çevirir ve ana dilinizde sistem dokümantasyonuna erişmenizi sağlar.**
 
-**Turkman**, Linux komutlarının man sayfalarını Türkçeye çevirir ve db'ye kaydeder. Türkçe içerik eksikliğini gidererek, Linux kullanıcıları için daha erişilebilir bir deneyim sunmayı hedefler.
+[🚀 Hızlı Kurulum](#-hızlı-kurulum) • [📖 Kullanım](#-kullanım) • [🤝 Katkıda Bulun](#-katkıda-bulunma) • [📚 Dokümantasyon](#-dokümantasyon)
 
-### ✨ Özellikler
-
-- 🌐 **Çoklu Kaynak Desteği**: Yerel man sayfaları, GitHub deposu ve SQLite veritabanından çeviriler
-- 📊 **SQLite Veritabanı**: Hızlı erişim için yerel çeviri önbelleği
-- 🔄 **Otomatik Güncelleme**: GitHub deposundan güncel çevirileri senkronize etme
-- 🖥️ **CLI Arayüzü**: Kolay kullanım için Typer tabanlı komut satırı arayüzü
-- 🎯 **Akıllı Öncelik**: Yerel → Veritabanı → GitHub sıralamasıyla çeviri arama
-
-### 🎖️ Sürüm Bilgisi
-
-- **Güncel Sürüm**: v0.5.x
-- **Son Güncelleme**: 14.06.2025
-- **Platform Desteği**: Debian tabanlı dağıtımlar (Ubuntu, Pardus, Linux Mint vb.)
+</div>
 
 ---
 
-## 🚀 Kurulum
+## ✨ Özellikler
+
+🌐 **Çoklu Kaynak Desteği** - Yerel man sayfaları, SQLite veritabanı ve GitHub deposundan çeviriler  
+📊 **Akıllı Önbellekleme** - Hızlı erişim için SQLite tabanlı yerel önbellek  
+🔄 **Otomatik Güncelleme** - GitHub deposundan güncel çevirileri otomatik senkronizasyon  
+🎯 **Akıllı Arama** - Yerel → Veritabanı → GitHub sıralamasıyla optimize edilmiş arama  
+🖥️ **Modern CLI** - Typer tabanlı kullanıcı dostu komut satırı arayüzü  
+⚡ **Hızlı ve Hafif** - Minimal sistem kaynağı kullanımı
+
+---
+
+## 🚀 Hızlı Kurulum
+
+### 📦 APT ile Kurulum (stable) (Önerilen)
+
+```bash
+# .deb paketini indirin
+curl -L -o turkman_0.6.5_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.6.5_all.deb
+
+# Paketi kurun
+sudo dpkg -i turkman_*_all.deb # hata verebilir aldırış etmeyin sonraki adıma geçin:
+sudo apt install -f  # Bağımlılıkları çözün
+```
+
+### 🔧 Script ile Kurulum (dev)
+
+```bash
+git clone https://github.com/mmapro12/turkman.git
+cd turkman 
+chmod +x install.sh
+./install.sh
+cd ..
+rm -rf turkman
+```
+
+### Indirdikten sonra:
+```bash
+turkman db sync # Turkmandb'yi init'lemek ve en güncel sürümde tutmak için turkman'ı indirdikten sonra bu komutu yazın.
+```
 
 ### 📋 Sistem Gereksinimleri
 
-**Desteklenen İşletim Sistemleri:**
-- Ubuntu 18.04+
-- Debian 10+
-- Linux Mint 19+
-- Pardus 21+
-- Diğer Debian tabanlı dağıtımlar
-
-**Gerekli Paketler:**
-- `manpages-tr` - Türkçe man sayfaları
-- `git` - Sürüm kontrolü
-- `curl` - HTTP istekleri
-- `python3` - Python runtime
-- `python3-pip` - Python paket yöneticisi
-
-### 🔧 Gereksinimler Kurulumu
-
-```bash
-sudo apt update
-sudo apt install manpages-tr git curl python3 python3-pip
-```
-
-### 📦 Turkman Kurulumu
-
-**Otomatik kurulum (Önerilen):**
-
-```bash
-curl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/install.sh | sudo bash
-```
-
-**Kurulum sonrası kontrol:**
-
-```bash
-turkman version
-```
-
-### 🗂️ Kurulum Dizin Yapısı
-
-```
-/opt/turkman/
-├── turkman.py          # Ana uygulama
-├── turkmandb.py        # Veritabanı yönetimi
-├── common.py           # Yardımcı fonksiyonlar
-├── version.txt         # Sürüm bilgisi
-├── install.sh          # Kurulum scripti
-└── scripts/
-    ├── update.sh       # Güncelleme scripti
-    └── uninstall.sh    # Kaldırma scripti
-```
-
-**Kullanıcı dizini:**
-```
-~/.turkmandb/
-└── turkman.db         # SQLite veritabanı
-```
+- **İşletim Sistemi**: Ubuntu 18.04+, Debian 10+, Linux Mint 19+, Pardus 21+
+- **Python**: 3.8 veya üzeri
+- **Bağımlılıklar**: `manpages-tr`, `python3-requests`, `python3-typer`
 
 ---
 
-## 📚 Kullanım
+## 📖 Kullanım
 
-### 🎯 Temel Kullanım
-
-**Man sayfasını Türkçe görüntüleme:**
+### 🎯 Temel Komutlar
 
 ```bash
-turkman <komut_adı>
-```
-
-**Örnekler:**
-
-```bash
-# Temel komutlar
+# Herhangi bir komutun Türkçe man sayfasını görüntüle
 turkman ls
 turkman clear
 
-# Uygulama komutları
-turkman brave-browser
-turkman ani-cli
-```
-
-### 🔍 Arama Öncelik Sırası
-
-Turkman, bir komut için çeviri ararken şu sırayı takip eder:
-
-1. **Yerel Man Sayfaları** (`/usr/share/man/tr/`)
-2. **Yerel Veritabanı** (`~/.turkmandb/turkman.db`)
-3. **Yapay zeka çevirisi** (Geliştirme aşamasında)
-
-## 🔧 Komut Referansı
-
-### 🎛️ Ana Komutlar
-
-#### `turkman <komut>` veya `turkman manpage <komut>`
-Belirtilen komut için Türkçe man sayfasını görüntüler.
-
-```bash
-turkman ls
-# ls komutunun Türkçe man sayfasını gösterir
-```
-
-### 🔄 Güncelleme Komutları
-
-#### `turkman update`
-Turkman uygulamasını en güncel sürüme günceller.
-
-```bash
-turkman update
-```
-
-#### `turkman version`
-Mevcut ve en güncel sürüm bilgilerini gösterir.
-
-```bash
+# Sürüm bilgisini kontrol et
 turkman version
-# Turkman CLI v0.4.5
-# Latest version v0.4.5 
-```
 
-### 🗃️ Veritabanı Komutları
-
-#### `turkman db init`
-Yerel veritabanını kurar ve tablo yapısını oluşturur.
-
-```bash
-turkman db init
-```
-
-#### `turkman db sync`
-GitHub deposundan en güncel çevirileri yerel veritabanına senkronize eder.
-
-```bash
+# Çeviri veritabanını güncelle
 turkman db sync
 ```
 
-### 🗑️ Sistem Komutları
+### 🔍 Çalışma Prensibi
 
-#### `turkman uninstall`
-Turkman'ı sistemden tamamen kaldırır.
+Turkman, bir komut için çeviri ararken şu **sıralamayı** takip eder:
 
-```bash
-turkman uninstall
+```
+1️⃣ Yerel Tüürkçe Man Sayfaları (/usr/share/man/tr/)
+    ↓ (Bulunamadıysa)
+2️⃣ Yerel SQLite Veritabanı (~/.turkmandb/)
+    ↓ (Bulunamadıysa)  
+3️⃣ Yapay zeka ile çevirme (Geliştirme aşamasında)
+    ↓ (Yapılamazsa)
+4️⃣ Orijinall İngilizce Man Sayfası (Yönlendirme)
 ```
 
-### 📖 Yardım
+### 📊 Komut Referansı
 
-#### `turkman --help`
-Tüm komutlar ve seçenekler hakkında Türkçe yardım gösterir.
-
-```bash
-turkman --help
-```
-
-#### `turkman turkman`
-Tukman'ın man dosyasını Türkçe görüntüler.
+| Komut | Açıklama |
+|-------|----------|
+| `turkman <komut>` | Belirtilen komutun Türkçe man sayfasını göster |
+| `turkman version` | Sürüm bilgilerini göster |
+| `turkman update` | Turkman'ı güncelle |
+| `turkman db init` | Veritabanını başlat |
+| `turkman db sync` | Çevirileri senkronize et |
+| `turkman uninstall` | Turkman'ı kaldır |
+| `turkman --help` | Yardım menüsünü göster |
 
 ---
 
-## 🏗️ Teknik Mimari
+## 🛠️ Gelişmiş Kullanım
+
+### 🔄 Veritabanı Yönetimi
+
+```bash
+# Veritabanını sıfırla ve yeniden başlat
+rm -rf ~/.turkmandb
+turkman db init
+turkman db sync
+
+# Veritabanı durumunu kontrol et
+ls -la ~/.turkmandb/
+```
+
+### 🌐 Çevrimdışı Kullanım
+
+Turkman, çevirileri yerel olarak önbelleğe aldığından internet bağlantısı olmadan da çalışabilir:
+
+```bash
+# İlk seferinde çevirileri indir
+turkman db sync
+
+# Artık çevrimdışı kullanabilirsiniz
+turkman ani-cli  # Yerel önbellekten gösterir
+```
+
+---
+
+## 🏗️ Proje Mimarisi
 
 ### 📊 Sistem Mimarisi
 
+```mermaid
+graph TD
+    A[Kullanıcı] -->|turkman ls| B[Turkman CLI]
+    B --> C{Çeviri Var mı?}
+    C -->|Evet| D[Yerel Man Sayfaları]
+    C -->|Hayır| E[SQLite Veritabanı]
+    E --> F{DB'de Var mı?}
+    F -->|Evet| G[Çeviriyi Göster]
+    F -->|Hayır| H[GitHub Deposu]
+    H --> I{GitHub'da Var mı?}
+    I -->|Evet| J[İndir ve Göster]
+    I -->|Hayır| K[Orijinal Man]
+    
+    D --> G
+    J --> L[DB'ye Kaydet]
+    L --> G
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Kullanıcı     │───▶│    Turkman      │───▶│      less       │
-│   (CLI)         │    │    (Python)     │    │   (Terminal)    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    Çeviri Kaynakları                            │
-├─────────────────┬─────────────────┬─────────────────────────────┤
-│  Yerel Man      │   SQLite DB     │         Yapay zeka          │
-│  (/usr/share/   │  (~/.turkmandb/ │   (Geliştirme aşamasında)   │
-│   man/tr/)      │   turkman.db)   │                             │
-└─────────────────┴─────────────────┴─────────────────────────────┘
+
+### 🗂️ Proje Yapısı
+
 ```
-
-### 🗄️ Veritabanı Şeması
-
-**Tablo: `man_pages`**
-
-| Sütun | Tür | Açıklama |
-|-------|-----|----------|
-| `id` | INTEGER PRIMARY KEY | Otomatik artan kimlik |
-| `command` | TEXT UNIQUE | Komut adı (benzersiz) |
-| `translated` | TEXT | Türkçe çeviri içeriği |
-| `last_updated` | TIMESTAMP | Son güncelleme zamanı |
-
-### 🐍 Python Bileşenleri
-
-#### `turkman.py` - Ana Uygulama
-- CLI arayüzü (Typer)
-- Komut yönlendirme
-- Çeviri arama mantığı
-
-#### `turkmandb.py` - Veritabanı Yönetimi
-- SQLite bağlantısı
-- CRUD işlemleri
-- GitHub senkronizasyonu
-
-#### `common.py` - Yardımcı Fonksiyonlar
-- Sürüm kontrolleri
-- HTTP istekleri
-- Güncelleme bildirimleri
-
-### 🔗 Dış Bağımlılıklar
-
-**Python Paketleri:**
-- `typer` - CLI framework
-- `requests` - HTTP istemcisi
-- `sqlite3` - Veritabanı (built-in)
-
-**Sistem Araçları:**
-- `man` - Man sayfası görüntüleyici
-- `curl` - Dosya indirme
+turkman/
+├── src/turkman/
+│   ├── __init__.py
+│   ├── turkman.py         # Ana CLI uygulaması
+│   ├── db.py              # Veritabanı yönetimi
+│   ├── utils.py           # Yardımcı fonksiyonlar
+│   └── version.py         # Sürüm bilgisi
+├── build_deb.sh           # .deb paketi oluşturma
+├── install.sh             # .deb paketi oluşturma ve indirme
+├── setup.py               # Python paketi yapılandırması
+├── README.md              # Bu dosya
+├── version.txt            # Sürüm bilgisi
+└── LICENSE                # GPL-3.0 lisansı
+```
 
 ---
 
@@ -302,75 +227,50 @@ Tukman'ın man dosyasını Türkçe görüntüler.
 
 ### 🎯 Katkı Türleri
 
-1. **Yeni Çeviriler**: Man sayfalarını Türkçeye çevirin
-2. **Çeviri Düzeltmeleri**: Mevcut çevirileri iyileştirin
-3. **Kod Geliştirme**: Yeni özellikler ekleyin
-4. **Dokümantasyon**: Belgeleri geliştirin
-5. **Hata Raporlama**: Sorunları bildirin
+- 🌍 **Yeni Çeviriler**: Man sayfalarını Türkçeye çevirin
+- 🔧 **Hata Düzeltmeleri**: Mevcut sorunları çözün  
+- ⚡ **Özellik Geliştirme**: Yeni fonksiyonlar ekleyin
+- 📚 **Dokümantasyon**: Belgeleri iyileştirin
+- 🐛 **Hata Raporlama**: Sorunları bildirin
 
-### 📝 Çeviri Süreci
+### 📝 Çeviri Katkısı
 
-**1. Çeviri Formatı**
+1. **Turkmandb deposunu fork edin**: [github.com/mmapro12/turkmandb](https://github.com/mmapro12/turkmandb)
 
-Man sayfası çevirileri standart man formatında olmalıdır.Nasıl yazıldığı ile ilgili daha fazla bilgi için:
-https://lifeoverlinux.com/linux-sistemlerde-man-sayfasi-nasil-yazilir/
-
-**2. Katkı Adımları**
-
+2. **Yeni çeviri ekleyin**:
 ```bash
-# 1. Turkmandb deposunu fork edin
-git clone https://github.com/mmapro12/turkmandb.git
-
-# 2. Yeni çeviri ekleyin
 cd turkmandb/pages/
-echo "çeviri_içeriği" > yeni_komut
+# Man formatında çeviri yazın
+echo "MAN_SAYFASI_İÇERİĞİ" > yeni_komut
+```
 
-# 3. pages.txt dosyasını güncelleyin
+3. **Çeviri listesini güncelleyin**:
+```bash
 echo "yeni_komut" >> ../pages.txt
-
-# 4. Değişiklikleri commit edin
-git add .
-git commit -m "feat: yeni_komut çevirisi eklendi"
-
-# 5. Pull request oluşturun
-git push origin main
 ```
 
-### 🔧 Geliştirme Ortamı
+4. **Pull request gönderin**
 
-**Gereksinimler:**
+### 💻 Kod Katkısı
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/mmapro12/turkman/main/requirements.txt -o requirements.txt
+# Projeyi fork edin ve klonlayın
+git clone https://github.com/mmapro12/turkman.git
+cd turkman
+
+# Geliştirme ortamını kurun
+python -m venv venv
+source venv/bin/activate
+pip install -e .
 pip install -r requirements.txt
-```
 
-### 📊 Proje Yapısı
+# Değişikliklerinizi yapın ve test edin
+python -m turkman.turkman ls
 
-```
-turkman/
-├── turkman.py              # Ana CLI uygulaması
-├── turkmandb.py           # Veritabanı modülü
-├── common.py              # Genel fonksiyonlar
-├── install.sh             # Kurulum scripti
-├── version.txt            # Sürüm dosyası
-├── README.md              # Temel dokümantasyon
-├── LICENSE                # GPL3 lisansı
-└── scripts/
-    ├── update.sh          # Güncelleme scripti
-    └── uninstall.sh       # Kaldırma scripti
-```
-
-### 🏷️ Git Commit Konvansiyonları
-
-```bash
-feat: yeni özellik eklendi
-fix: hata düzeltildi
-docs: dokümantasyon güncellendi
-style: kod formatı düzenlendi
-refactor: kod yeniden yapılandırıldı
-test: test eklendi
-chore: maintenance işleri
+# Commit edin ve push edin
+git add .
+git commit -m "feat: yeni özellik eklendi"
+git push origin main
 ```
 
 ---
@@ -379,114 +279,74 @@ chore: maintenance işleri
 
 ### ❗ Yaygın Problemler
 
-#### 1. "Komut bulunamadı" Hatası
-
-**Sorun**: `'komut_adı' adında bir komut bulunamadı.`
-
-**Çözüm**:
+#### "Komut bulunamadı" Hatası
 ```bash
-# Komutun sistem üzerinde var olup olmadığını kontrol edin
+# Komutun sistem üzerinde olup olmadığını kontrol edin
 which komut_adı
 man komut_adı
-
-# Doğru komut adını kullandığınızdan emin olun
 ```
 
-#### 2. "Çeviri bulunamadı" Hatası
-
-**Sorun**: `'komut' için çeviri bulunamadı.`
-
-**Çözüm**:
+#### "Çeviri bulunamadı" Hatası
 ```bash
 # Veritabanını güncelleyin
 turkman db sync
 
-# Yerel man sayfalarını kontrol edin
+# Yerel Türkçe man sayfalarını kontrol edin
 man -L tr komut_adı
-
-# Eğer hala hata alıyorsanız istediğiniz komutun Türkçe man dosyası hala yok demektir.
 ```
 
-
-#### 3. Güncelleme Sorunları
-
-**Sorun**: `update.sh bulunamadı!`
-
-**Çözüm**:
+#### Veritabanı Sorunları
 ```bash
-# Turkman'ı yeniden kurun
-curl -L https://raw.githubusercontent.com/mmapro12/turkman/refs/heads/main/install.sh | sudo bash
-```
-
-#### 4. Veritabanı Sorunları
-
-**Sorun**: Veritabanı bozulması veya erişim sorunları
-
-**Çözüm**:
-```bash
-# Veritabanını yeniden başlatın
+# Veritabanını sıfırlayın
 rm -rf ~/.turkmandb
 turkman db init
 turkman db sync
 ```
 
-### 📧 Destek
+### 📞 Destek
 
 Sorunlarınız devam ederse:
-
-1. **GitHub Issues**: [https://github.com/mmapro12/turkman/issues](https://github.com/mmapro12/turkman/issues)
-2. **Loglari paylaşın**: Terminal çıktısını ekleyin
-3. **Sistem bilgisi**: OS sürümü, Python sürümü vb.
+- 🐛 **GitHub Issues**: [Sorun bildir](https://github.com/mmapro12/turkman/issues)
 
 ---
 
-## ❓ SSS (Sıkça Sorulan Sorular)
 
-### 📋 Genel Sorular
+## 🎯 Gelecek Planları
 
-#### S: Turkman hangi işletim sistemlerinde çalışır?
-**C**: Şu anda sadece Debian tabanlı Linux dağıtımlarında (Ubuntu, Pardus, Linux Mint vb.) çalışmaktadır. Diğer dağıtımlar için destek planlanmaktadır.
-
-#### S: Çeviri kalitesi nasıl?
-**C**: Çeviriler topluluk katkısıyla sürekli iyileştirilmektedir. Hatalı çevirileri GitHub deposu üzerinden bildirebilir ve düzeltmeler önerebilirsiniz.
-
-#### S: İnternet bağlantısı gerekli mi?
-**C**: Sadece güncelleme ve senkronizasyon işlemleri için gereklidir. Yerel veritabanı ve man sayfaları çevrimdışı çalışır.
-
-### 🔧 Teknik Sorular
-
-#### S: Man sayfası formatı neden önemli?
-**C**: Turkman, man komutunun standart formatını kullanır. Bu sayede mevcut man görüntüleyicileri ile uyumlu çalışır.
-
-#### S: Kendi çevirilerimi nasıl eklerim?
-**C**: [Katkıda Bulunma](#katkıda-bulunma) bölümünde detaylı bilgi bulabilirsiniz.
-
-### 🚀 Gelecek Planları
-
-#### S: Hangi yeni özellikler gelecek?
-**C**: 
-- Yapay zeka destekli otomatik çeviri sistemi
-- Python dokümantasyonu desteği
-- Diğer Linux dağıtımları desteği
+- 🤖 **AI Destekli Çeviri**: AI tabanlı otomatik çeviri sistemi
+- 🐧 **Dağıtım Desteği**: Red Hat, Arch Linux desteği
+- 📱 **GUI Arayüzü**: Masaüstü uygulaması geliştirme
+- 📖 **Python Dokümantasyonu**: Python kütüphanesi dokümantasyon desteği
 
 ---
 
 ## 📄 Lisans
 
-Bu proje **GPL-3.0** lisansı altında lisanslanmıştır. Detaylar için [LICENSE](https://github.com/mmapro12/turkman/blob/main/LICENSE) dosyasına bakınız.
+Bu proje [GPL-3.0](LICENSE) lisansı altında lisanslanmıştır.
+
+
 
 ---
 
 ## 🔗 Bağlantılar
 
-- **GitHub Repository**: [https://github.com/mmapro12/turkman](https://github.com/mmapro12/turkman)
-- **Çeviri Deposu**: [https://github.com/mmapro12/turkmandb](https://github.com/mmapro12/turkmandb)
-- **Issues/Sorunlar**: [https://github.com/mmapro12/turkman/issues](https://github.com/mmapro12/turkman/issues)
+<div align="center">
+
+[![GitHub](https://img.shields.io/badge/GitHub-turkman-black?logo=github)](https://github.com/mmapro12/turkman)
+[![Çeviri Deposu](https://img.shields.io/badge/GitHub-turkmandb-green?logo=github)](https://github.com/mmapro12/turkmandb)
+[![Releases](https://img.shields.io/badge/Releases-latest-blue?logo=github)](https://github.com/mmapro12/turkman/releases)
+[![Issues](https://img.shields.io/badge/Issues-report-red?logo=github)](https://github.com/mmapro12/turkman/issues)
+
+</div>
 
 ---
 
-**Not**: Bu dokümantasyon sürekli güncellenmektedir. En güncel sürüm için GitHub deposunu kontrol ediniz.
+## 🙏 Teşekkürler
 
----
+- 🌟 **Katkıda Bulunanlar**: Tüm çevirmenlere ve geliştiricilere teşekkürler
+- 📖 **Topluluk**: Linux Türkiye topluluğuna destekleri için teşekkürler
+- 🛠️ **Araçlar**: Python, SQLite, GitHub ve açık kaynak ekosisteme teşekkürler
 
-*Turkman - Türkçe Linux kullanıcıları için, Türkçe Linux kullanıcıları tarafından geliştirilen açık kaynak bir proje.*
+
+
+*Sevgi ile Maraş'ta yapıldı.* 
