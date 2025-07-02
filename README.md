@@ -1,3 +1,9 @@
+<div align="right">
+
+🇹🇷 [Türkçe](README.md) | [English](README.en.md)
+
+</div>
+
 # Turkman - Linux için Türkçe Man Sayfaları
 
 <div align="center">
