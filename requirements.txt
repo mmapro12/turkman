@@ -14,7 +14,6 @@ rich==13.9.4
 setuptools==80.9.0
 shellingham==1.5.4
 stdeb==0.10.0
--e git+ssh://git@github.com/mmapro12/turkman.git@d3ebc510c8142d868e638dd3ab7889077906f84b#egg=turkman
 typer==0.15.2
 typing_extensions==4.12.2
 urllib3==2.3.0
