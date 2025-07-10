@@ -1,6 +1,9 @@
 /buffs/
 venv/
 __pycache__/
+debian/
+dist/
+build/
 .idea/
 translate.py
 formatter.py
