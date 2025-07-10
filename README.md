@@ -10,7 +10,7 @@
 
 <img src="./images/turkman.png" width="400"/>
 
-[![Version](https://img.shields.io/badge/version-0.7.1-blue.svg)](https://github.com/mmapro12/turkman/releases)
+[![Version](https://img.shields.io/badge/version-0.7.2-blue.svg)](https://github.com/mmapro12/turkman/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
@@ -40,11 +40,11 @@
 
 ```bash
 # .deb paketini indirin
-curl -L -o turkman_0.7.1_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.7.1_all.deb
+curl -L -o turkman_0.7.2_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.7.2_all.deb
 
-# Paketi kurun
 sudo dpkg -i turkman_*_all.deb # hata verebilir aldırış etmeyin sonraki adıma geçin:
 sudo apt install -f  # Bağımlılıkları çözün
+turkman db sync # Veritabanını güncelleyin
 ```
 
 ### 🔧 Script ile Kurulum (dev)
@@ -60,16 +60,11 @@ cd ..
 rm -rf turkman
 ```
 
-### İndirdikten sonra:
-```bash
-turkman db sync # Turkmandb'yi init'lemek ve en güncel sürümde tutmak için turkman'ı indirdikten sonra bu komutu yazın.
-```
-
 ### 📋 Sistem Gereksinimleri
 
 - **İşletim Sistemi**: Tüm Linux işletim sistemleri desteklidir.
-- **Python**: 3.8 veya üzeri
-- **Bağımlılıklar**: `manpages-tr`, `python3-requests`, `python3-typer`
+- **Python**: 3.10 veya üzeri
+- **Bağımlılıklar**: `manpages-tr`, `curl`
 - Turkman'ı install.sh script'tinden indiriyorsanız manpages-tr'ı indirmenize gerek yok. Otomatikmen kurulur.
 
 ---
@@ -111,7 +106,7 @@ Turkman, bir komut için çeviri ararken şu **sıralamayı** takip eder:
 | `turkman <komut>` | Belirtilen komutun Türkçe man sayfasını göster |
 | `turkman version` | Sürüm bilgilerini göster |
 | `turkman update` | Turkman'ı güncelle |
-| `turkman db init` | Veritabanını başlat |
+| `turkman db init` | Veritabanını oluştur |
 | `turkman db sync` | Çevirileri senkronize et |
 | `turkman uninstall` | Turkman'ı kaldır |
 | `turkman --help` | Yardım menüsünü göster |
@@ -127,9 +122,6 @@ Turkman, bir komut için çeviri ararken şu **sıralamayı** takip eder:
 rm -rf ~/.turkmandb
 turkman db init
 turkman db sync
-
-# Veritabanı durumunu kontrol et
-ls -la ~/.turkmandb/
 ```
 
 ### 🌐 Çevrimdışı Kullanım
@@ -179,6 +171,7 @@ turkman/
 │   ├── utils.py           # Yardımcı fonksiyonlar
 │   └── version.py         # Sürüm bilgisi
 ├── build_deb.sh           # .deb paketi oluşturma
+├── build_bin.sh           # bin dosyasını oluşturma
 ├── install.sh             # .deb paketi oluşturma ve indirme
 ├── setup.py               # Python paketi yapılandırması
 ├── README.md              # Bu dosya
@@ -279,7 +272,6 @@ Sorunlarınız devam ederse:
 ## 🎯 Gelecek Planları
 
 - 🤖 **AI Destekli Çeviri**: AI tabanlı otomatik çeviri sistemi
-- 🐧 **Dağıtım Desteği**: Red Hat, Arch Linux desteği
 - 📱 **GUI Arayüzü**: Masaüstü uygulaması geliştirme
 - 📖 **Python Dokümantasyonu**: Python kütüphanesi dokümantasyon desteği
 
@@ -288,8 +280,6 @@ Sorunlarınız devam ederse:
 ## 📄 Lisans
 
 Bu proje [GPL-3.0](LICENSE) lisansı altında lisanslanmıştır.
-
-
 
 ---
 

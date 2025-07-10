@@ -57,9 +57,12 @@ cat > debian/DEBIAN/postinst << 'EOF'
 set -e
 
 echo "🔧 Turkman kurulum sonrası yapılandırma..."
-
-echo "VERİ TABANI GÜNCEL DEĞİL. LÜTFEN GÜNCELLEYİNİZ. GÜNCELLEMEK İÇİN:\n\t\turkman db sync"
-
+echo ""
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo "VERİ TABANI GÜNCEL DEĞİL. LÜTFEN GÜNCELLEYİNİZ. GÜNCELLEMEK İÇİN:"
+echo "turkman db sync"
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo ""
 echo "✅ Turkman başarıyla kuruldu!"
 echo "💡 Kullanım: turkman <komut_adı>"
 echo "📖 Yardım: turkman --help"
@@ -85,7 +88,6 @@ EOF
 chmod 755 debian/DEBIAN/postinst
 chmod 755 debian/DEBIAN/prerm
 
-# Ana executable script oluştur
 cp -r dist/turkman debian/usr/local/bin/turkman
 chmod +x debian/usr/local/bin/turkman
 
