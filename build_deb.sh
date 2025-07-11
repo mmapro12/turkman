@@ -37,8 +37,7 @@ Section: utils
 Priority: optional
 Architecture: ${ARCHITECTURE}
 Maintainer: ${MAINTAINER}
-Depends: python3 (>= 3.10), python3-pip, manpages-tr
-Suggests: curl, git
+Depends: python3 (>= 3.10), python3-pip, manpages-tr, curl, git
 Homepage: https://github.com/mmapro12/turkman
 Description: Linux komutları için Türkçe man sayfaları
  Turkman, Linux komutlarının man sayfalarını Türkçeye çevirir ve 
@@ -91,18 +90,14 @@ chmod 755 debian/DEBIAN/prerm
 cp -r dist/turkman debian/usr/local/bin/turkman
 chmod +x debian/usr/local/bin/turkman
 
-# Dokümantasyon dosyalarını kopyala
 echo -e "${YELLOW}📚 Dokümantasyon kopyalanıyor...${NC}"
 cp README.md debian/usr/share/doc/turkman/
 cp LICENSE debian/usr/share/doc/turkman/ 2>/dev/null || echo "LICENSE dosyası bulunamadı"
 
-# Man sayfası oluştur
 cp -r ./docs/man/man1/turkman.1  debian/usr/share/man/man1/turkman.1
 
-# Man sayfasını sıkıştır
 gzip -9 debian/usr/share/man/man1/turkman.1
 
-# .deb paketini oluştur
 echo -e "${YELLOW}📦 .deb paketi oluşturuluyor...${NC}"
 PACKAGE_FILE="${PACKAGE_NAME}_${VERSION}_${ARCHITECTURE}.deb"
 

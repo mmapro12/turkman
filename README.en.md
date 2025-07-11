@@ -10,7 +10,7 @@
 
 <img src="./images/turkman.png" width="400"/>
 
-[![Version](https://img.shields.io/badge/version-0.7.1-blue.svg)](https://github.com/mmapro12/turkman/releases)
+[![Version](https://img.shields.io/badge/version-0.8.0-blue.svg)](https://github.com/mmapro12/turkman/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
@@ -38,18 +38,21 @@
 
 ### 📦 Install via APT (stable) (Recommended)
 
+If you are using Ubuntu(24+), ZorinOS etc. you can use this tested script to install turkman: 
+
 ```bash
 # Download the .deb package
-curl -L -o turkman_0.7.1_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.7.1_all.deb
+curl -L -o turkman_0.8.0_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.8.0_all.deb
 
 # Install the package
 sudo dpkg -i turkman_*_all.deb # may give error, ignore and run next:
 sudo apt install -f  # Fix dependencies
+turkman db sync # Update database
 ```
 
 ### 🔧 Install via Script (dev)
 
-You can install turkman on any distribution with this script:
+If you are using Pardus, Debian etc. you can install turkman using this script. Also you can install turkman on any distribution with this script:
 
 ```bash
 git clone https://github.com/mmapro12/turkman.git
@@ -58,11 +61,6 @@ chmod +x install.sh
 ./install.sh
 cd ..
 rm -rf turkman
-```
-
-### After Downloading:
-```bash
-turkman db sync # Run this to initialize and update Turkmandb after installing turkman.
 ```
 
 ### 📋 System Requirements

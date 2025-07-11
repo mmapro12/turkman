@@ -10,7 +10,7 @@
 
 <img src="./images/turkman.png" width="400"/>
 
-[![Version](https://img.shields.io/badge/version-0.7.2-blue.svg)](https://github.com/mmapro12/turkman/releases)
+[![Version](https://img.shields.io/badge/version-0.8.0-blue.svg)](https://github.com/mmapro12/turkman/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
@@ -22,6 +22,10 @@
 </div>
 
 ---
+
+<div align="center">
+<img src="./images/banner.png" width="700"/>
+</div>
 
 ## ✨ Özellikler
 
@@ -36,11 +40,13 @@
 
 ## 🚀 Hızlı Kurulum
 
-### 📦 APT ile Kurulum (stable) (Önerilen)
+### 📦 APT ile Kurulum (stable)
+
+Ubuntu (24+), ZorinOS gibi dağıtımlar kullanıyorsanız aşağıdaki test edilmiş .deb'i indirebilirsiniz:
 
 ```bash
 # .deb paketini indirin
-curl -L -o turkman_0.7.2_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.7.2_all.deb
+curl -L -o turkman_0.8.0_all.deb https://github.com/mmapro12/turkman/releases/latest/download/turkman_0.8.0_all.deb
 
 sudo dpkg -i turkman_*_all.deb # hata verebilir aldırış etmeyin sonraki adıma geçin:
 sudo apt install -f  # Bağımlılıkları çözün
@@ -49,11 +55,15 @@ turkman db sync # Veritabanını güncelleyin
 
 ### 🔧 Script ile Kurulum (dev)
 
-Bu script ile herhangi bir dağıtımda turkman'ı kurabilirsiniz:
+Pardus, Debian gibi dağıtımlar kullanıyorsanız aşağıdaki script ile sisteminize uygun bir .deb oluşturup yükleyebilirsiniz. Aynı zamanda bu script ile herhangi bir dağıtımda turkman'ı kurabilirsiniz:
 
 ```bash
 git clone https://github.com/mmapro12/turkman.git
 cd turkman 
+python3 -m venv venv 
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
 chmod +x install.sh
 ./install.sh
 cd ..
@@ -64,8 +74,14 @@ rm -rf turkman
 
 - **İşletim Sistemi**: Tüm Linux işletim sistemleri desteklidir.
 - **Python**: 3.10 veya üzeri
-- **Bağımlılıklar**: `manpages-tr`, `curl`
+- **Bağımlılıklar**: `manpages-tr`, `curl`, `python3`, `python3-pip`
 - Turkman'ı install.sh script'tinden indiriyorsanız manpages-tr'ı indirmenize gerek yok. Otomatikmen kurulur.
+
+Tüm bağımlılıkları indirmek için:
+```bash
+sudo apt update
+sudo apt install python3 python3-pip curl manpages-tr
+```
 
 ---
 

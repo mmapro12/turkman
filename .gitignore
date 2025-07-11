@@ -4,6 +4,8 @@ __pycache__/
 debian/
 dist/
 build/
+*.deb
+*.spec
 .idea/
 translate.py
 formatter.py
