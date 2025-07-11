@@ -38,7 +38,7 @@
 
 ### 📦 APT ile Kurulum (stable)
 
-Ubuntu (24+), ZorinOS gibi dağıtımlar kullanıyorsanız aşağıdaki test edilmiş .deb'i indirebilirsiniz:
+Ubuntu(24+), ZorinOS, Pardus gibi dağıtımlar kullanıyorsanız aşağıdaki test edilmiş .deb'i indirebilirsiniz:
 
 ```bash
 # .deb paketini indirin
@@ -51,7 +51,7 @@ turkman db sync # Veritabanını güncelleyin
 
 ### 🔧 Script ile Kurulum (dev)
 
-Pardus, Debian gibi dağıtımlar kullanıyorsanız aşağıdaki script ile sisteminize uygun bir .deb oluşturup yükleyebilirsiniz. Aynı zamanda bu script ile herhangi bir dağıtımda turkman'ı kurabilirsiniz:
+Yukarıdaki .deb ile problem yaşıyorsanız aşağıdaki script ile sisteminize uygun bir .deb oluşturup yükleyebilirsiniz. Aynı zamanda bu script ile herhangi bir dağıtımda turkman'ı kurabilirsiniz:
 
 ```bash
 git clone https://github.com/mmapro12/turkman.git
