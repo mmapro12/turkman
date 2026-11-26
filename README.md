@@ -12,7 +12,7 @@
 
 [![Version](https://img.shields.io/badge/version-0.8.0-blue.svg)](https://github.com/mmapro12/turkman/releases)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)](https://python.org)
+[![Python](https://img.shields.io/badge/python-3.10+-yellow.svg)](https://python.org)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://github.com/mmapro12/turkman)
 
 **Linux komutlarının man sayfalarını Türkçeye çevirir ve ana dilinizde sistem dokümantasyonuna erişmenizi sağlar.**
