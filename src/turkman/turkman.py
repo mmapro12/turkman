@@ -326,12 +326,13 @@ def update(
     else:
         try:
             console.print("🔧 Manuel güncelleme yapılıyor...")
-            install_script = """
-            git clone https://github.com/mmapro12/turkman.git /tmp/turkman/
-            cd /tmp/turkman/ && ./install.sh
-            rm -rf /tmp/turkman/
-            """
-            subprocess.run(install_script, shell=True, check=True)
+            with tempfile.TemporaryDirectory(prefix="turkman-") as temp_dir:
+                repo_dir = os.path.join(temp_dir, "turkman")
+                subprocess.run(
+                    ["git", "clone", "https://github.com/mmapro12/turkman.git", repo_dir],
+                    check=True,
+                )
+                subprocess.run(["./install.sh"], cwd=repo_dir, check=True)
             console.print("✅ Script güncelleme tamamlandı!")
         
         except Exception as e:
