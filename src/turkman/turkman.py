@@ -470,6 +470,8 @@ def main():
                 handle_man_command(first_arg)
         else:
             app()
+    except typer.Exit as e:
+        sys.exit(e.exit_code)
     except KeyboardInterrupt:
         console.print("\n🚫 İşlem kullanıcı tarafından iptal edildi.")
         sys.exit(1)

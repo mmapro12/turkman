@@ -8,17 +8,18 @@ GITHUB_REPO = "mmapro12/turkmandb"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/pages/"
 GITHUB_API_URL = "https://api.github.com/repos/mmapro12/turkman"
 
-def get_latest_release_info():
+def get_latest_release_info(timeout: float = 10, quiet: bool = False):
     """GitHub'dan en son sürüm bilgilerini alır."""
     try:
-        response = requests.get(f"{GITHUB_API_URL}/releases/latest", timeout=10)
+        response = requests.get(f"{GITHUB_API_URL}/releases/latest", timeout=timeout)
         if response.status_code == 200:
             return response.json()
-        else:
+        elif not quiet:
             typer.echo(f"❌ GitHub API'den sürüm bilgisi alınamadı: {response.status_code}", err=True)
-            return None
+        return None
     except Exception as e:
-        typer.echo(f"❌ GitHub API hatası: {e}", err=True)
+        if not quiet:
+            typer.echo(f"❌ GitHub API hatası: {e}", err=True)
         return None
 
 
@@ -135,11 +136,11 @@ def check_updates(current_command: str) -> None:
         return
 
     current_version = get_version()
-    release_info = get_latest_release_info()
+    # Güncelleme kontrolü isteğe bağlıdır: başarısız olursa komut çalışmaya devam eder
+    release_info = get_latest_release_info(timeout=2, quiet=True)
     
     if not release_info:
-        typer.echo("❌ Sürüm bilgisi alınamadı. İnternet bağlantınızı kontrol edin.")
-        raise typer.Exit(code=1)
+        return
     
     latest_version = release_info["tag_name"]
     needs_update = compare_versions(current_version, latest_version)
