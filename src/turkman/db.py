@@ -8,6 +8,8 @@ GITHUB_REPO = "mmapro12/turkmandb"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/pages/"
 
 HOME_DIR = os.path.expanduser("~")
+PAGES_LIST_URL = f"https://raw.githubusercontent.com/{GITHUB_REPO}/refs/heads/main/pages.txt"
+REQUEST_TIMEOUT = 10
 DB_DIR = os.path.join(HOME_DIR, ".turkmandb")
 DB_PATH = os.path.join(DB_DIR, "turkman.db")
 
@@ -61,17 +63,28 @@ def get_translation(command):
 
 
 def get_turkmandb():
-    response = requests.get("https://raw.githubusercontent.com/mmapro12/turkmandb/refs/heads/main/pages.txt")
-    if response.status_code == 200:
-        allpages = response.text
-        for cmd in allpages.splitlines():
-            url = f"{GITHUB_RAW_URL}{cmd}"
-            cmd_req = requests.get(url)
-            if cmd_req.status_code == 200:
-                add_translation(command=cmd, translated=cmd_req.text)
-            else:
-                print(f"turkmandb: {cmd} komutu için çevrili man sayfası alınamadı.")
-    return False
+    """Tüm çevirileri indirir; eksik kalan olursa RuntimeError fırlatır."""
+    try:
+        response = requests.get(PAGES_LIST_URL, timeout=REQUEST_TIMEOUT)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        raise RuntimeError(f"Çeviri listesi alınamadı: {e}") from e
+
+    commands = [line.strip() for line in response.text.splitlines() if line.strip()]
+    failed = []
+    for cmd in commands:
+        try:
+            page = requests.get(f"{GITHUB_RAW_URL}{cmd}", timeout=REQUEST_TIMEOUT)
+            page.raise_for_status()
+        except requests.RequestException:
+            print(f"turkmandb: {cmd} komutu için çevrili man sayfası alınamadı.")
+            failed.append(cmd)
+            continue
+        if not add_translation(command=cmd, translated=page.text):
+            failed.append(cmd)
+
+    if failed:
+        raise RuntimeError(f"{len(failed)}/{len(commands)} sayfa alınamadı: {', '.join(failed)}")
 
 
 if __name__ == "__main__":

@@ -412,6 +412,7 @@ def sync():
         console.print("✅ Veritabanı senkronizasyonu tamamlandı!")
     except Exception as e:
         console.print(f"❌ Veritabanı senkronizasyonunda hata: {e}")
+        raise typer.Exit(code=1)
 
 
 @db_app.command()
